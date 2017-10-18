@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.ColumnDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbColumn">
+		<id column="COLUMN_ID" property="columnId" jdbcType="INTEGER" />
+		
+		<result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+		<result column="COLUMN_IMG" property="columnImg" jdbcType="VARCHAR" />
+		<result column="COLUMN_NO" property="columnNo" jdbcType="VARCHAR" />
+		<result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
+		<result column="ORDERBY" property="orderby" jdbcType="INTEGER" />
+		<result column="CRTTIME" property="crttime" jdbcType="VARCHAR" />
+		<result column="parentName" property="parentName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap type="com.hontek.comm.model.Tree" id="TreeVo">
+	    <id column="TYPE_ID" property="id" jdbcType="INTEGER"/>
+	    <result column="TYPE_NAME" property="text" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	    COLUMN_ID,PARENT_ID,COLUMN_IMG,COLUMN_NO,COLUMN_NAME,ORDERBY,CRTTIME
+	</sql>
+	
+	
+	
+	<!--  查询记录  -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		SELECT t1.*,t2.column_name as parentName FROM tb_column t1 LEFT JOIN tb_column t2 ON t1.parent_id=t2.column_id where 1=1 
+		<if test="params.columnName != null"> and t1.column_name like '%${params.columnName}%' </if>
+	</select>
+	
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+	    select count(*) from tb_column where 1=1 
+	    <if test="params.columnName != null"> and column_name like '%${params.columnName}%' </if>
+	</select>
+	
+	<insert id="add" parameterType="com.hontek.goods.model.TbGoodsBrand">
+	    insert into tb_column (<include refid="Base_Column_List"/>) 
+	    values (${columnId},${parentId},#{columnImg},#{columnNo},#{columnName},${orderby},#{crttime})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.String">
+	    delete from tb_column where brand_id in (#{ids})
+	</delete>
+	
+	<update id="update" parameterType="com.hontek.goods.model.TbGoodsBrand">
+	    update tb_column set PARENT_ID=${parentId},COLUMN_IMG=#{columnImg},COLUMN_NO=#{columnNo},COLUMN_NAME=#{columnName},ORDERBY=${orderby},CRTTIME=#{crttime} where COLUMN_ID=${columnId}
+	</update>
+	
+	<select id="getTree" resultMap="TreeVo" parameterType="java.lang.Integer">
+	    SELECT column_id as id,column_name as text from tb_column where parent_id=${parentId}
+	</select>
+
+</mapper>

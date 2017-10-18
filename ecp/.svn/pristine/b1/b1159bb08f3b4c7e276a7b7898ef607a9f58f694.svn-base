@@ -1,0 +1,148 @@
+var orderAllAmount=0;
+$(function(){
+	var tab = GetRequest();
+	var orderids=tab.split(",");
+	var op='';;
+	for(var i= 0 ; i < orderids.length ; i++){
+		op+=refresh(orderids[i]);
+	}
+	
+	$('#orderInfo').html(op);
+
+	$('#orderAmount').html('￥'+orderAllAmount);
+
+	address(tab);
+	
+	$("#alipayBtn").click(function(){
+		var orderAmount = $("#orderAmount").html().substring(1);
+		window.location.href='order/toAlipay.mobile?orderIds='+tab+"&totalAmount="+orderAmount;
+
+	});
+});
+
+
+function backspace() {
+	window.location.href="all_orders.jsp?tab=2"; 
+}
+
+function GetRequest() {
+	var url = location.search; //获取url中"?"符后的字串
+	if (url.indexOf("?") != -1) {  //判断是否有参数
+		var str = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+		strs = str.split("=");  //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
+		return strs[1];     //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
+	}
+}
+
+//刷新待付款订单
+function refresh(tab){
+	var queryParam = {"params[orderId]":tab} ;
+	var op='';
+	$.ajax({
+		   type: "POST",
+		   url: "order/page.mobile",
+		   data : queryParam ,
+		   dataType:"json" ,
+		   async:false,
+		   success: function(data){
+			   op = getHtmlList(data);
+			  
+		   }
+		});
+	return op;
+}
+
+function getHtmlList(data){
+	var op = '' ;
+	var rows = data.rows ;
+	for(var i= 0 ; i < rows.length ; i++){
+		op += getPayment(rows[i].tbOrder,rows[i].tbOrderDetailList);
+	}
+	return op ;
+}
+
+//这里写“等待买家付款，一键支付”的div
+function getPayment(tbOrder,tbOrderDetailList){
+	var op =' <div class="wy-media-box weui-media-box_text">'+tbOrder.shopName+'<div class="weui-media-box__bd">';
+	var goodsCount=0;
+    for (var i = 0 ; i< tbOrderDetailList.length ;i++ ) {
+		op += getDetailHtml(tbOrderDetailList[i],0);
+		goodsCount+=tbOrderDetailList[i].goodsCount;
+	}; 
+	   
+	op +=' </div>';
+	
+	op +=' <div class="weui-panel">\
+			<div class="weui-panel__bd">\
+		    <div class="weui-media-box weui-media-box_small-appmsg">\
+		      <div class="weui-cells">\
+		        <div class="weui-cell weui-cell_access">\
+		          <div class="weui-cell__bd weui-cell_primary">\
+		            <p class="font-14"><span class="mg-r-10">配送方式</span><span class="fr">快递</span></p>\
+		          </div>\
+		        </div>\
+				<div class="weui-cell weui-cell_access">\
+		          <div class="weui-cell__bd weui-cell_primary">\
+		            <p class="font-14"><span class="mg-r-10">运费</span><span class="fr txt-color-red">(含运费<b>￥' + (tbOrder.shipFree==null ? 0:tbOrder.shipFree) + '</b>)</span></p>\
+		          </div>\
+		        </div>\
+		            <div class="weui-cell weui-cell_access">\
+		            <div class="weui-cell__bd weui-cell_primary">\
+		            <p class="font-14"><span class="mg-r-10"></span><span class="fr txt-color-red">¥' + (tbOrder.orderAmount==null ? 0:tbOrder.orderAmount)+ '</span><span class="fr">共'+goodsCount+'件商品，小计：</span></p>\
+		            </div>\
+		            </div>\
+		      </div>\
+		    </div>\
+		  </div>\
+		</div></div>';
+	
+	orderAllAmount+=parseFloat(tbOrder.orderAmount==null ? 0:tbOrder.orderAmount);
+	
+	return op ;
+}
+
+//获取订单中一个商品的html
+function getDetailHtml(tbOrderDetail,index){
+	
+	var op = ' <div class="weui-media-box_appmsg ord-pro-list">\
+	     <div class="weui-media-box__hd"><a href="proinfo.jsp?goodsId='+ tbOrderDetail.goodsId +'"><img class="weui-media-box__thumb" src="'+ tbOrderDetail.goodsImg +'" alt=""></a></div>\
+	     <div class="weui-media-box__bd">\
+	       <h1 class="weui-media-box__desc"><a href="proinfo.jsp?goodsId='+ tbOrderDetail.goodsId +'" class="ord-pro-link">'+ tbOrderDetail.goodsName +'</a></h1>\
+	       <p class="weui-media-box__desc">规格：<span>' + tbOrderDetail.goodsSpecs + '</span><span></span></p>\
+	       <div class="clear mg-t-10">\
+	         <div class="wy-pro-pri fl">¥<em class="num font-15">' + tbOrderDetail.saledPrice + '</em></div>\
+	         <div class="pro-amount fr"><span class="font-13">数量×<em class="name">'+ tbOrderDetail.goodsCount +'</em></span></div>\
+	         </div>\
+	        </div>\
+          </div>';
+
+	return op ;
+}
+
+//订单详情
+function orderInfo(obj){
+	var orderId = getOrderId(obj);
+	console.log(orderId);
+	window.open('buy/custom/orderinfo.jsp?orderId='+orderId);
+}
+
+//物流信息
+function address(orderId){
+	var op='';
+
+	var queryParams = {"params[orderId]":orderId } ;
+	$.ajax({
+	   type: "POST",
+	   url: "../ns/webLogis/findTbLogisByParam.mobile",
+	   data : queryParams ,
+	   dataType:"json" ,
+	   success: function(data){
+		   op +='<a href="address_list.html" class="weui-cell_access">\
+		        <h4 class="address-name"><span>'+data.recipient+'</span><span>'+data.mobile+'</span></h4>\
+		        <div class="address-txt">'+data.addrArea+data.addr+'</div></a>';
+		   $('#address_list').html(op);
+	   }
+	});
+	
+
+}

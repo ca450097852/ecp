@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.theme.dao.ThemeGoodsDao" >
+
+  <resultMap id="BaseResultMap" type="com.hontek.theme.model.ThemeGoods" >
+    <id column="theme_googs_id" property="themeGoogsId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="theme_id" property="themeId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+    <result column="themeName" property="themeName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    theme_googs_id, goods_id, theme_id, create_time
+  </sql>
+  
+   <sql id="getCommon" >
+    	 from tb_theme t1,tb_theme_goods t2 where
+    	  t1.theme_id=t2.theme_id
+    <if test="params != null and params.themeGoogsId != null and params.themeGoogsId != ''"> 
+		and theme_googs_id = #{params.themeGoogsId,jdbcType=INTEGER}
+	</if>
+     <if test="params != null and params.themeName != null and params.themeName != ''"> 
+    	and  INSTR(theme_name,#{params.themeName,jdbcType=VARCHAR})>0 
+    </if>
+  	</sql>
+  
+  <select id="findPageList" parameterType="com.hontek.comm.util.SearchPageUtil" resultMap="BaseResultMap" >
+	SELECT DISTINCT t2.theme_id,
+	theme_name AS themeName,max(t2.create_time) as create_time
+	<include refid="getCommon" /> 
+	GROUP BY t2.theme_id
+  </select>
+  
+  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+  	<include refid="getCommon" />
+	</select>
+  
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from tb_theme_goods
+    where theme_id = #{themeId,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="delete2" parameterType="java.lang.Integer" >
+    delete from tb_theme_goods
+    where theme_googs_id = #{themeGoogsId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.hontek.theme.model.ThemeGoods" >
+    insert into tb_theme_goods (theme_googs_id, goods_id, theme_id, 
+      create_time)
+    values (#{themeGoogsId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{themeId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+ 
+  <update id="update" parameterType="com.hontek.theme.model.ThemeGoods" >
+    update tb_theme_goods
+    <set >
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="themeId != null" >
+        theme_id = #{themeId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where theme_googs_id = #{themeGoogsId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

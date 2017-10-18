@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<title>售后退换</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+		<link rel="stylesheet" href="lib/weui.min.css">
+		<link rel="stylesheet" href="css/jquery-weui.css">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+
+	<body ontouchstart>
+		<header class="wy-header">
+			<div class="wy-header-icon-back"><span></span></div>
+			<div class="wy-header-title">售后退换</div>
+		</header>
+		<!--主体-->
+		<div class="weui-content">
+			<!--产品详情-->
+			<div class="weui-tab">
+				<div class="weui-navbar" style="position:fixed; top:44px; left:0; right:0; height:44px;">
+					<a class="weui-navbar__item proinfo-tab-tit weui-bar__item--on" href="#tab1">售后申请</a>
+					<a class="weui-navbar__item proinfo-tab-tit" href="#tab2">申请记录</a>
+
+				</div>
+				<div class="weui-tab__bd proinfo-tab-con">
+					<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+						<div class="weui-panel weui-panel_access">
+							<div class="weui-panel__hd"><span>单号：2132165457654545</span><span class="fr">下单时间：2016-09-08</span></div>
+							<div class="weui-media-box__bd  pd-10">
+								<div class="weui-media-box_appmsg ord-pro-list">
+									<div class="weui-media-box__hd">
+										<a href="pro_info.html"><img class="weui-media-box__thumb" src="upload/pro3.jpg" alt=""></a>
+									</div>
+									<div class="weui-media-box__bd">
+										<h1 class="weui-media-box__desc"><a href="pro_info.html" class="ord-pro-link">蓝之蓝蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食酒2瓶装包邮</a></h1>
+										<p class="weui-media-box__desc">规格：<span>红色</span>，<span>23</span></p>
+										<div class="clear mg-t-10">
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="weui-panel__ft">
+								<div class="weui-cell weui-cell_access weui-cell_link oder-opt-btnbox">
+									<a href="#" class="ords-btn-com">申请售后</a>
+								</div>
+							</div>
+						</div>
+						<div class="weui-panel weui-panel_access">
+							<div class="weui-panel__hd"><span>单号：2132165457654545</span><span class="fr">下单时间：2017-05-07</span></div>
+							<div class="weui-media-box__bd  pd-10">
+								<div class="weui-media-box_appmsg ord-pro-list">
+									<div class="weui-media-box__hd">
+										<a href="pro_info.html"><img class="weui-media-box__thumb" src="upload/pro3.jpg" alt=""></a>
+									</div>
+									<div class="weui-media-box__bd">
+										<h1 class="weui-media-box__desc"><a href="pro_info.html" class="ord-pro-link">蓝之蓝蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食酒2瓶装包邮</a></h1>
+										<p class="weui-media-box__desc">规格：<span>红色</span>，<span>23</span></p>
+										<div class="clear mg-t-10">
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="weui-panel__ft">
+								<div class="weui-cell weui-cell_access weui-cell_link oder-opt-btnbox">
+									<a href="javascript:;" class="ords-btn-dele">确认收货</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tab2" class="weui-tab__bd-item ">
+						<div class="weui-panel weui-panel_access">
+							<div class="weui-panel__hd"><span>售后编号：54574545</span><span class="fr">申请时间：2016-09-08</span></div>
+							<div class="weui-media-box__bd  pd-10">
+								<div class="weui-media-box_appmsg ord-pro-list">
+									<div class="weui-media-box__hd">
+										<a href="pro_info.html"><img class="weui-media-box__thumb" src="upload/pro3.jpg" alt=""></a>
+									</div>
+									<div class="weui-media-box__bd">
+										<h1 class="weui-media-box__desc"><a href="pro_info.html" class="ord-pro-link">Q7浓香型白酒500ml52度高端纯粮食酒2瓶装包邮</a></h1>
+										<p class="weui-media-box__desc">申请类型：<span class="txt-color-red">退款</span><span class="txt-color-red">退货</span></p>
+										<div class="clear mg-t-10">
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="weui-panel__ft">
+								<div class="weui-cell weui-cell_access weui-cell_link oder-opt-btnbox">
+									<div class="sellafter-type fl">
+									<img src="images/sellafter-progress.png">
+									<p>进行中</p>
+									</div>
+									<a href="#" class="ords-btn-com weui-btn_warn">详情</a>
+								</div>
+							</div>
+						</div>
+						<div class="weui-panel weui-panel_access">
+							<div class="weui-panel__hd"><span>售后编号：457654545</span><span class="fr">申请时间：2017-05-07</span></div>
+							<div class="weui-media-box__bd  pd-10">
+								<div class="weui-media-box_appmsg ord-pro-list">
+									<div class="weui-media-box__hd">
+										<a href="pro_info.html"><img class="weui-media-box__thumb" src="upload/pro3.jpg" alt=""></a>
+									</div>
+									<div class="weui-media-box__bd">
+										<h1 class="weui-media-box__desc"><a href="pro_info.html" class="ord-pro-link">经典Q7浓香型白酒500ml52度高端纯粮食酒2瓶装包邮</a></h1>
+										<p class="weui-media-box__desc ">申请类型：<span class="txt-color-red">退款</span></p>
+										<div class="clear mg-t-10">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="weui-panel__ft">
+								<div class="weui-cell weui-cell_access weui-cell_link oder-opt-btnbox">
+									<div class="sellafter-type fl">
+									<img src="images/sellafter-finish.png">
+									<p>已完成</p>
+									</div>
+									<a href="#" class="ords-btn-com weui-btn_warn">详情</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<span id="tophovertree" title="返回顶部"></span>
+		<!--底部导航-->
+
+		<div id="selcet_sku" class='weui-popup__container popup-bottom' style="z-index:600;">
+			<div class="weui-popup__overlay" style="opacity:1;"></div>
+			<div class="weui-popup__modal">
+				<div class="toolbar">
+					<div class="toolbar-inner">
+						<a href="javascript:;" class="picker-button close-popup">关闭</a>
+						<h1 class="title">商品属性</h1>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script src="lib/jquery-2.1.4.js"></script>
+		<script src="lib/fastclick.js"></script>
+		<script>
+			$(function() {
+				FastClick.attach(document.body);
+			});
+		</script>
+		<script src="js/jquery-weui.js"></script>
+		<script src="js/swiper.js"></script>
+		<script>
+			$(".swiper-zhutu").swiper({
+				loop: true,
+				paginationType: 'fraction',
+				autoplay: 5000
+			});
+		</script>
+		<script>
+			$(function() {
+				$(".promotion-sku li").click(function() {
+					$(this).addClass("active").siblings("li").removeClass("active");
+				})
+			})
+		</script>
+		<script>
+			$(document).on("click", "#show-toast", function() {
+				$.toast("收藏成功", function() {
+					console.log('close');
+				});
+			})
+		</script>
+		<script>
+			$(document).on("open", ".weui-popup-modal", function() {
+				console.log("open popup");
+			}).on("close", ".weui-popup-modal", function() {
+				console.log("close popup");
+			});
+		</script>
+		<script>
+			$(function() {
+				initTopHoverTree("tophov" + "ertree", 30, 10, 10);
+			})
+		</script>
+		<script>
+			function initTopHoverTree(hvtid, times, right, bottom) {
+				$("#" + hvtid).css("right", right).css("bottmo", bottom);
+				$("#" + hvtid).on("click", function() {
+					goTopHovetree(times);
+				})
+				$(window).scroll(function() {
+					if($(window).scrollTop() > 268) {
+						$("#" + hvtid).fadeIn(100);
+					} else {
+						$("#" + hvtid).fadeOut(100);
+					}
+				});
+			}
+			//返回顶部动画
+			//goTop(500);//500ms内滚回顶部
+			function goTopHovetree(times) {
+				if(!!!times) {
+					$(window).scrollTop(0);
+					return;
+				}
+				var sh = $('body').scrollTop(); //移动总距离
+				var inter = 13.333; //ms,每次移动间隔时间
+				var forCount = Math.ceil(times / inter); //移动次数
+				var stepL = Math.ceil(sh / forCount); //移动步长
+				var timeId = null;
+
+				function aniHovertree() {
+					!!timeId && clearTimeout(timeId);
+					timeId = null;
+					//console.log($('body').scrollTop());
+					if($('body').scrollTop() <= 0 || forCount <= 0) { //移动端判断次数好些，因为移动端的scroll事件触发不频繁，有可能检测不到有<=0的情况
+						$('body').scrollTop(0);
+						return;
+					}
+					forCount--;
+					sh -= stepL;
+					$('body').scrollTop(sh);
+					timeId = setTimeout(function() {
+						aniHovertree();
+					}, inter);
+				}
+				aniHovertree();
+			}
+		</script>
+	</body>
+
+</html>

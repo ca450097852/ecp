@@ -1,0 +1,276 @@
+package com.hontek.goods.model;
+
+
+/**
+* 
+* <p>Title: 商品实体类</p>
+* <p>Description: </p>
+* <p>Copyright: Copyright (c) 2015</p>
+* <p>Company: **公司</p>
+* @author lzk
+* @version 1.0
+ */
+public class TbGoods {
+	private Integer goodsId;
+	private Integer themeGoogsId;
+	private String goodsName;
+	private Integer shopId;
+	private Integer typeId;
+	private Integer brandId;
+	private Integer modelId;
+	private Integer goodSeq;
+	private Float chengbenPrice;
+	private Float marketPrice;
+	private Float saledPrice;
+	private Integer saledNum;
+	private Integer inventory;
+	private String goodsNo;
+	private String barcode;
+	private String dimenno;
+	private String dimennoImg;
+	private String goodsImg;
+	private String goodsSpecs;
+	private String goodsDesc;
+	private String netWeight;
+	private String roughWeight;
+	private String goodsAddr;
+	private String sourceArea;
+	private String manufacturer;
+	private String sourceTel;
+	private String sourceAddr;
+	private String storageConditions;
+	private String shelfLife;
+	private String state;
+	private String createTime;
+	private String updateTime;
+	private Integer memberId;
+	private String remark;
+	private String recommend;//1是，2否；默认2
+	
+	private String typeName;
+	private String shopName ;
+	public Integer getGoodsId() {
+		return goodsId;
+	}
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public Integer getShopId() {
+		return shopId;
+	}
+	public void setShopId(Integer shopId) {
+		this.shopId = shopId;
+	}
+	public Integer getTypeId() {
+		return typeId;
+	}
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+	public Integer getBrandId() {
+		return brandId;
+	}
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
+	}
+	public Integer getModelId() {
+		return modelId;
+	}
+	public void setModelId(Integer modelId) {
+		this.modelId = modelId;
+	}
+	public Integer getGoodSeq() {
+		return goodSeq;
+	}
+	public void setGoodSeq(Integer goodSeq) {
+		this.goodSeq = goodSeq;
+	}
+	public Float getChengbenPrice() {
+		return chengbenPrice;
+	}
+	public void setChengbenPrice(Float chengbenPrice) {
+		this.chengbenPrice = chengbenPrice;
+	}
+	public Float getMarketPrice() {
+		return marketPrice;
+	}
+	public void setMarketPrice(Float marketPrice) {
+		this.marketPrice = marketPrice;
+	}
+	public Float getSaledPrice() {
+		return saledPrice;
+	}
+	public void setSaledPrice(Float saledPrice) {
+		this.saledPrice = saledPrice;
+	}
+	public Integer getSaledNum() {
+		return saledNum;
+	}
+	public void setSaledNum(Integer saledNum) {
+		this.saledNum = saledNum;
+	}
+	public Integer getInventory() {
+		return inventory;
+	}
+	public void setInventory(Integer inventory) {
+		this.inventory = inventory;
+	}
+	public String getGoodsNo() {
+		return goodsNo;
+	}
+	public void setGoodsNo(String goodsNo) {
+		this.goodsNo = goodsNo;
+	}
+	public String getBarcode() {
+		return barcode;
+	}
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+	public String getDimenno() {
+		return dimenno;
+	}
+	public void setDimenno(String dimenno) {
+		this.dimenno = dimenno;
+	}
+	public String getDimennoImg() {
+		return dimennoImg;
+	}
+	public void setDimennoImg(String dimennoImg) {
+		this.dimennoImg = dimennoImg;
+	}
+	public String getGoodsImg() {
+		return goodsImg;
+	}
+	public void setGoodsImg(String goodsImg) {
+		this.goodsImg = goodsImg;
+	}
+	public String getGoodsSpecs() {
+		return goodsSpecs;
+	}
+	public void setGoodsSpecs(String goodsSpecs) {
+		this.goodsSpecs = goodsSpecs;
+	}
+	public String getGoodsDesc() {
+		return goodsDesc;
+	}
+	public void setGoodsDesc(String goodsDesc) {
+		this.goodsDesc = goodsDesc;
+	}
+	public String getNetWeight() {
+		return netWeight;
+	}
+	public void setNetWeight(String netWeight) {
+		this.netWeight = netWeight;
+	}
+	public String getRoughWeight() {
+		return roughWeight;
+	}
+	public void setRoughWeight(String roughWeight) {
+		this.roughWeight = roughWeight;
+	}
+	public String getGoodsAddr() {
+		return goodsAddr;
+	}
+	public void setGoodsAddr(String goodsAddr) {
+		this.goodsAddr = goodsAddr;
+	}
+	public String getSourceArea() {
+		return sourceArea;
+	}
+	public void setSourceArea(String sourceArea) {
+		this.sourceArea = sourceArea;
+	}
+	public String getManufacturer() {
+		return manufacturer;
+	}
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+	public String getSourceTel() {
+		return sourceTel;
+	}
+	public void setSourceTel(String sourceTel) {
+		this.sourceTel = sourceTel;
+	}
+	public String getSourceAddr() {
+		return sourceAddr;
+	}
+	public void setSourceAddr(String sourceAddr) {
+		this.sourceAddr = sourceAddr;
+	}
+	public String getStorageConditions() {
+		return storageConditions;
+	}
+	public void setStorageConditions(String storageConditions) {
+		this.storageConditions = storageConditions;
+	}
+	public String getShelfLife() {
+		return shelfLife;
+	}
+	public void setShelfLife(String shelfLife) {
+		this.shelfLife = shelfLife;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	public Integer getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(Integer memberId) {
+		this.memberId = memberId;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getRecommend() {
+		return recommend;
+	}
+	public void setRecommend(String recommend) {
+		this.recommend = recommend;
+	}
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	public String getShopName() {
+		return shopName;
+	}
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+	public Integer getThemeGoogsId() {
+		return themeGoogsId;
+	}
+	public void setThemeGoogsId(Integer themeGoogsId) {
+		this.themeGoogsId = themeGoogsId;
+	}
+
+	
+}

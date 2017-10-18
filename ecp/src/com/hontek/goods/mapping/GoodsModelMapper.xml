@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.GoodsModelDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbGoodsModel">
+		<id column="model_id" property="modelId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="model_no" property="modelNo" jdbcType="VARCHAR" />
+		<result column="model_name" property="modelName" jdbcType="VARCHAR" />
+		<result column="model_img" property="modelImg" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="model_price" property="modelPrice" jdbcType="FLOAT" />
+		<result column="model_count" property="modelCount" jdbcType="INTEGER" />
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		model_id,goods_id,model_no,model_name,model_img,state,model_price ,model_count
+	</sql>
+
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select <include refid="Base_Column_List"/> from tb_goods_model where 1=1 
+		<if test="params.goodsId!=null"> and goods_id=${params.goodsId}</if>
+		<if test="params.state!=null"> and state=${params.state}</if>
+	</select>
+
+	<select id="findModelList" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select <include refid="Base_Column_List"/> from tb_goods_model where goods_id=${goodsId}
+	</select>
+	
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_goods_model where 1=1 
+	</select>
+	
+	<select id="findByPrimaryId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"></include> from tb_goods_model where model_id = #{modelId} 
+	</select>
+
+	<insert id="add" parameterType="com.hontek.goods.model.TbGoodsModel">
+		insert into tb_goods_model (<include refid="Base_Column_List"/>) values (${modelId},${goodsId},#{modelNo},#{modelName},#{modelImg},${state},#{modelPrice},#{modelCount})
+	</insert>
+
+	<update id="update" parameterType="com.hontek.goods.model.TbGoodsModel">
+		update tb_goods_model set state=${state},model_img=#{modelImg},model_name=#{modelName},model_no=#{modelNo},goods_id=${goodsId},model_price=#{modelPrice},model_count=#{modelCount} where model_id=${modelId}
+	</update>
+	<delete id="delete" parameterType="java.lang.String">
+		delete from tb_goods_model where model_id in (#{0})
+	</delete>
+	
+	
+</mapper>

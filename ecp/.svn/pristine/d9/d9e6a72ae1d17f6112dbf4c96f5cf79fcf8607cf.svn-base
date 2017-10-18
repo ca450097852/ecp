@@ -1,0 +1,36 @@
+package com.hontek.order.service;
+
+
+import com.hontek.comm.model.Grid;
+import com.hontek.comm.util.SearchMapUtil;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.order.model.Logis;
+/**
+ * 
+ * @ClassName: LogisService
+ * @Description: TODO(发货物流信息表 Service)
+ * @date 2017-9-25 
+ * @author ca
+ * @version 1.0
+ */
+public interface TbLogisService {
+
+	public String addLogis(Logis logis);
+	
+	public String deleteLogis(String ids);
+
+	public String updateLogis(Logis logis);
+
+	/**
+	 * 分页查询
+	 */
+	public Grid findLogisList(SearchPageUtil page);
+	
+	public Logis findTbLogisByParam(SearchMapUtil map);
+	
+	public Logis findTbLogisById(Integer logisId);
+	
+	public String modifyLogis(Logis logis);
+	
+	public Logis findByOrderId(String orderId);
+}

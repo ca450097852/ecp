@@ -1,0 +1,182 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.hontek.member.model.TbMemberUser"  %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String filePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+
+String shopId=request.getParameter("shopId");
+String flag=request.getParameter("flag");
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>店铺主页</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="溯源商城">
+
+<link rel="stylesheet" href="lib/weui.min.css">
+<link rel="stylesheet" href="css/jquery-weui.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body ontouchstart>
+<input type="hidden" id="shopId" value="<%=shopId %>"/>
+<input type="hidden" id="flag" value="<%=flag%>"/>
+<input type="hidden" id="filePath" value="<%=filePath%>"/>
+
+	<header class="weui-header fixed-top">
+	 <div class="wy-header-icon-back" onclick="window.location.href='index.jsp';"><span></span></div>
+		<!--  <a href="#" class="head-icon head-icon-qr">
+				<img src="images/icon-qr.png">
+			</a>-->
+  <div class="weui-search-bar" id="searchBar">
+    <form class="weui-search-bar__form">
+      <div class="weui-search-bar__box">
+        <i class="weui-icon-search"></i>
+        <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索您想要的商品" required>
+        <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+      </div>
+      <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+        <i class="weui-icon-search"></i>
+        <span>搜索您想要的商品</span>
+      </label>
+    </form>
+    <a href="javascript:search();"  style="display:block;margin-left:10px;line-height:28px;color:#09bb07;white-space:nowrap"  >搜索</a>
+    <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+  </div>
+  <div class="wy-center-top">
+    <div class="weui-media-box weui-media-box_appmsg">
+      <div class="weui-media-box__hd shop"><img onclick="goInfo();"  class="weui-media-box__thumb radius" id="shopLogo" src="" alt=""></div>
+     
+      <div class="weui-media-box__bd">
+        <h4 class="weui-media-box__title user-name" id="shopName" ></h4>
+        <p class="user-grade">信用度：二级</p>
+      </div>
+      <div class="weui-media-box__bd">
+     
+        <div class="fans">
+     <a href="javascript:shouCang();" class="weui-btn weui-btn_warn" style="width: 80px;height: 30px;font-size:13px; display: inline;">收藏本店</a>
+        	<p class="user-integral ">粉丝<em class="num">50000</em></p>
+        </div>
+      </div>
+    </div>
+<!--    <div class="xx-menu weui-flex">
+      <div class="weui-flex__item"><div class="xx-menu-list"><em>987</em><p>账户余额</p></div></div>
+      <div class="weui-flex__item"><div class="xx-menu-list"><em>459</em><p>我的蓝豆</p></div></div>
+      <div class="weui-flex__item"><div class="xx-menu-list"><em>4</em><p>收藏商品</p></div></div>
+    </div>-->
+  </div>
+  <a href="#" class="head-icon head-icon-news">
+				<img src="images/icon-news.png">
+				<span class="weui-badge" style="position: absolute;top: -.5em;left: 1.6em;">8</span>
+			</a>
+</header>
+<!--主体-->
+<div class='weui-content'>
+  
+  
+  <div class="weui-tab">
+    <div class="weui-navbar" style="position:fixed; top:156px; left:0; right:0; height:44px; background:#fff;">
+      <a class="weui-navbar__item proinfo-tab-tit font-14 weui-bar__item--on" href="#tab1">店铺首页</a>
+      <a class="weui-navbar__item proinfo-tab-tit font-14" id="allGoods" href="#tab2">全部宝贝</a>
+      <a class="weui-navbar__item proinfo-tab-tit font-14" href="#tab3">新货上市</a>
+      <a class="weui-navbar__item proinfo-tab-tit font-14" href="#tab4" id="typeButton"><span id="typeName"></span></a>
+    </div>
+    
+    <div class="weui-tab__bd proinfo-tab-con" style="padding-top:200px;">
+      <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+        <div class="weui-panel weui-panel_access">
+          <div class="wy-Module-con">
+      <ul class="wy-pro-list clear" id="hot-shopList">
+      </ul>
+      <div class="morelinks "><a class="weui-navbar__item proinfo-tab-tit font-14" href="javascript:;" onclick="goAll();">查看更多 >></a></div>
+    </div>
+        </div>
+        <div class="weui-panel weui-panel_access">
+        </div>
+      </div>
+      
+      <div id="tab2" class="weui-tab__bd-item" >
+      
+     <div class="pro-sort" style=" background:#fff;">
+    <div class="weui-flex" >
+      <div class="weui-flex__item"><div class="placeholder NormalCss">综合</div></div>
+      <div class="weui-flex__item"><div id="saleCount" class="placeholder SortAscCss">按销量</div></div>
+      <div class="weui-flex__item"><div id="salePrice" class="placeholder SortDescCss">按价格</i></div></div>
+    </div>
+  </div>
+      
+        <div class="weui-panel weui-panel_access">
+        
+          <div class="weui-media-box__bd  pd-10" id="shop-allgoodsList">
+            
+          </div>
+        </div>
+      </div>
+      
+      	<div id="tab3" class="weui-tab__bd-item">
+        <div class="weui-panel weui-panel_access">
+          <div class="wy-Module-con">
+      		<ul class="wy-pro-list clear" id="new-GoodsList">
+      		</ul>
+    	</div>
+        </div>
+        <div class="weui-panel weui-panel_access">
+        </div>
+      </div>
+
+	<div id="tab4" class="weui-tab__bd-item ">
+        <div class="weui-panel weui-panel_access">
+          <div class="wy-Module-con">
+      <ul class="wy-pro-list clear" id="type-shopList">
+      </ul>
+      
+    </div>
+        </div>
+        
+        <div class="weui-panel weui-panel_access">
+          	
+        </div>
+        
+      </div>
+      
+
+      </div>
+      
+      
+    </div>
+  </div>
+  
+  
+  
+</div>
+
+<div class="foot-black"></div>
+<div class="weui-tabbar wy-foot-menu">
+  <a href="javascript:;" onclick="goGoodsType()" class="shop-foot-menu-items">
+    
+    <p class="weui-tabbar__label">宝贝分类</p>
+  </a>
+  <a href="javascript:;" onclick="goInfo();" id='show-toast' class="shop-foot-menu-items">
+    
+    <p class="weui-tabbar__label">店铺简介</p>
+  </a>
+  <a href="javascript:;"  class="weui-tabbar__item yellow-color open-popup" data-target="#join_cart">
+  	
+    <p class="promotion-foot-menu-label">联系商家</p>
+  </a>
+  
+</div>
+
+<script src="lib/jquery-2.1.4.js"></script> 
+<script src="lib/fastclick.js"></script> 
+<script src="js/jquery-weui.js"></script>
+<script src="js/shop.js"></script>
+</body>
+</html>
+

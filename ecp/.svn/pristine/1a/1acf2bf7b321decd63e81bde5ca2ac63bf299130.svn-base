@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.GoodsTypeDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbGoodsType">
+		<id column="TYPE_ID" property="typeId" jdbcType="INTEGER" />
+		
+		<result column="UPCATE_ID" property="upcateId" jdbcType="INTEGER" />
+		<result column="TYPE_NO" property="typeNo" jdbcType="VARCHAR" />
+		<result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+		<result column="ENT_ID" property="entId" jdbcType="VARCHAR" />
+		<result column="sts" property="sts" jdbcType="INTEGER" />
+		<result column="upcateName" property="upcateName" jdbcType="VARCHAR"/>
+		<result column="type_img" property="typeImg" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hontek.comm.model.Tree" id="TreeVo">
+	    <id column="TYPE_ID" property="id" jdbcType="INTEGER"/>
+	    <result column="TYPE_NAME" property="text" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		type_id,upcate_id,type_no,type_name,ent_id,sts,type_img
+	</sql>
+	
+	<!--  查询记录  -->
+	<select id="findList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		<!-- select <include refid="Base_Column_List"/> from tb_goods_type -->
+		SELECT t1.*,t2.type_name as upcateName FROM tb_goods_type t1 LEFT JOIN tb_goods_type t2 on t1.upcate_id=t2.type_id 
+		where 1=1 <if test="params.typeName!=null"> and t1.type_name like '%${params.typeName}%'</if>
+		<if test="params.sts!=null"> and t1.sts=${params.sts}</if>
+	</select>
+	
+	<!--  查询所有记录  -->
+	<select id="findAllList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		SELECT t1.*,t2.type_name as upcateName FROM tb_goods_type t1 LEFT JOIN tb_goods_type t2 on t1.upcate_id=t2.type_id where 1=1 
+		<if test="upcateIds!=null"> and t1.UPCATE_ID in (${upcateIds})</if>
+	</select>
+	
+	<select id="getCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	    select count(*) from tb_goods_type where 1=1 <if test="typeName!=null"> and t1.type_name like '%${typeName}%'</if>
+		<if test="sts!=null"> and t1.sts=${sts}</if>
+	</select>
+	
+	<insert id="add" parameterType="com.hontek.goods.model.TbGoodsType">
+	    insert into tb_goods_type (<include refid="Base_Column_List"/>) 
+	    values (${typeId},${upcateId},#{typeNo},#{typeName},${entId},${sts},#{typeImg})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.String">
+	    delete from tb_goods_type where type_id in (${_parameter})
+	</delete>
+	
+	<update id="update" parameterType="com.hontek.goods.model.TbGoodsType">
+	    update tb_goods_type set upcate_id=${upcateId},type_no=#{typeNo},
+	    type_name=#{typeName},ent_id=${entId},sts=${sts},type_img=#{typeImg} where type_id=${typeId}
+	</update>
+	
+	<select id="findForTree" resultMap="TreeVo">
+	    select type_id,type_name from tb_goods_type where upcate_id=${upcateId} and sts=${sts}
+	</select>
+	
+	<select id="getGoodsTypeById" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select <include refid="Base_Column_List"/> from tb_goods_type where type_id=${typeId}
+	</select>
+	
+	<select id="getGoodsTypeByShopId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	   SELECT DISTINCT tt.type_name,tt.type_id typeId from tb_goods tg,tb_shop ts,tb_goods_type tt where tg.shop_id=ts.shop_id AND tg.type_id=tt.type_id AND ts.shop_id=${shopId}
+	</select>
+	
+	<select id="getGoodsTypeByUpcateId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select <include refid="Base_Column_List"/> from tb_goods_type where upcate_id=${upcateId}
+	</select>
+
+</mapper>

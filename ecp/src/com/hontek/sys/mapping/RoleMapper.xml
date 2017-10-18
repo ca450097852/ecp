@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.sys.dao.RoleDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.sys.model.TsRole" >
+    <id column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="ent_id" property="entId" jdbcType="INTEGER" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+    <result column="role_level" property="roleLevel" jdbcType="INTEGER" />
+    <result column="sts" property="sts" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_id, ent_id, role_name, role_desc, role_level, sts
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from ts_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.sys.model.TsRole" >
+    insert into ts_role (role_id, ent_id, role_name, 
+      role_desc, role_level, sts
+      )
+    values (#{roleId,jdbcType=INTEGER}, #{entId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, 
+      #{roleDesc,jdbcType=VARCHAR}, #{roleLevel,jdbcType=INTEGER}, #{sts,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="update" parameterType="com.hontek.sys.model.TsRole" >
+    update ts_role
+    set ent_id = #{entId,jdbcType=INTEGER},
+      role_name = #{roleName,jdbcType=VARCHAR},
+      role_desc = #{roleDesc,jdbcType=VARCHAR},
+      role_level = #{roleLevel,jdbcType=INTEGER},
+      sts = #{sts,jdbcType=VARCHAR}
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  
+  	<sql id="getCommon" >
+    	from ts_role where 1 = 1 
+    <if test="params != null and params.entId != null" >
+    	and ent_id = #{params.entId,jdbcType=INTEGER}
+    </if>
+     <if test="params != null and params.roleName != null and params.roleName != ''" >
+    	and  INSTR(role_name,#{params.roleName,jdbcType=VARCHAR})>0 
+    </if>
+  	</sql>
+  
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+	
+	<resultMap id="TreeMap" type="com.hontek.comm.model.Combo" >
+    <id column="role_id" property="value" jdbcType="INTEGER" />
+    <result column="role_name" property="text" jdbcType="VARCHAR" />
+  </resultMap>
+	
+	<select id="getEntRoleCombo" parameterType="com.hontek.sys.model.TsRole"  resultMap="TreeMap">
+	  	select role_id as value,role_name as text  from ts_role where 1 = 1 
+	    <if test="entId != null" >
+	    	and ent_id = #{entId,jdbcType=INTEGER}
+	    </if>
+	     <if test="roleName != null" >
+	    	and  INSTR(role_name,#{roleName,jdbcType=VARCHAR})>0 
+	    </if>
+	    <if test="in_roleIds != null" >
+	    	and  role_id in( #{in_roleIds,jdbcType=VARCHAR} ) 
+	    </if>
+	    <if test="out_roleIds != null" >
+	    	and  role_id not in( #{out_roleIds,jdbcType=VARCHAR} ) 
+	    </if>
+    </select>
+</mapper>

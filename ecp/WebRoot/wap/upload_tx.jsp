@@ -1,0 +1,188 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.hontek.member.model.TbMemberUser"  %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>登陆</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="溯源商城">
+<link rel="stylesheet" href="lib/weui.min.css">
+<link rel="stylesheet" href="css/jquery-weui.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body ontouchstart>
+ <input type="hidden" id="basePath" value="<%=basePath%>"/>
+<!--主体-->
+<header class="wy-header">
+  <div class="wy-header-icon-back"  onclick="window.location.href=document.referrer;"><span></span></div>
+  <div class="wy-header-title">上传头像</div>
+</header>
+<div class="weui-content">
+<div class="weui-cells weui-cells_form">
+<div class="weui-gallery" id="gallery">
+      <span class="weui-gallery__img" id="galleryImg"></span>
+      <div class="weui-gallery__opr">
+        <a href="javascript:" rel="external nofollow" class="weui-gallery__del">
+          <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+        </a>
+      </div>
+    </div>
+
+	<form id="fileForm" method="post" action="memberUser/upload2.mobile"   enctype="multipart/form-data" >
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<div class="weui-uploader__bd">
+					<ul class="weui-uploader__files" id="uploaderFiles">
+					</ul>
+					<div class="weui-uploader__input-box">
+						<input id="uploaderInput" class="weui-uploader__input js_file" id="files" name="file" type="file" accept="image/*" multiple>
+					</div>
+				</div>
+			</div>
+		</div>
+		 <a href='javascript:void(0);' onclick="upload();" class="weui-btn weui-btn_primary" />上传</a>
+	</form>
+</div>
+
+
+<script src="lib/jquery-2.1.4.js"></script> 
+<script src="lib/fastclick.js"></script> 
+<script type="text/javascript" src="js/jquery.Spinner.js"></script>
+<script>
+   var basePath;
+   var base64;
+   var count=0;
+   var form=$("#fileForm");
+   var flag=0;
+  $(function() {
+    FastClick.attach(document.body);
+	$uploaderFiles = $("#uploaderFiles");
+	$gallery = $("#gallery");
+	$galleryImg = $("#galleryImg");
+	// 允许上传的图片类型
+			var allowTypes = [ 'image/jpg', 'image/jpeg', 'image/png', 'image/gif' ];
+			// 1024KB，也就是 1MB
+			var maxSize = 1024 * 1024;
+			// 图片最大宽度
+			var maxWidth = 300;
+			// 最大上传图片数量
+			var maxCount = 1;
+			
+			$('.js_file').on('change', function(event) {
+			if(count>=maxCount){
+			$.alert({
+							text : '只允许上传一张图片'
+						});
+						return;
+			}
+			
+				var files = event.target.files;
+				// 如果没有选中文件，直接返回
+				if (files.length === 0) {
+					return;
+				}
+				
+				for (var i = 0, len = files.length; i < len; i++) {
+					var file = files[i];
+					var reader = new FileReader();
+					// 如果类型不在允许的类型范围内
+					if (allowTypes.indexOf(file.type) === -1) {
+						$.alert({
+							text : '该类型不允许上传'
+						});
+						form[0].reset();
+						continue;
+					}
+ 					if (file.size > maxSize) {
+ 						$.alert({
+ 							text : '图片太大，不允许上传'
+ 						});
+ 						form[0].reset();
+ 						continue;
+ 					}
+					reader.onload = function(e) {
+						var img = new Image();
+						img.onload = function() {
+							// 不要超出最大宽度
+							var w = Math.min(maxWidth, img.width);
+							// 高度按比例计算
+							var h = img.height * (w / img.width);
+							var canvas = document.createElement('canvas');
+							var ctx = canvas.getContext('2d');
+							// 设置 canvas 的宽度和高度
+							canvas.width = w;
+							canvas.height = h;
+							ctx.drawImage(img, 0, 0, w, h);
+							 base64 = canvas.toDataURL('image/png');
+
+							// 插入到预览区
+							var $preview = $('<li class="weui-uploader__file weui-uploader__file_status" style="background-image:url('
+									+ base64 + ')"><div class="weui-uploader__file-content">0%</div></li>');
+							flag=1;
+							$('.weui-uploader__files').append($preview);
+							
+							// 然后假装在上传，可以post base64格式，也可以构造blob对象上传，也可以用微信JSSDK上传
+							var progress = 0;
+							function uploading() {
+								$preview.find('.weui-uploader__file-content').text(++progress + '%');
+								if (progress < 100) {
+									setTimeout(uploading, 30);
+								} else {
+									// 如果是失败，塞一个失败图标
+									//$preview.find('.weui-uploader__file-content').html('<i class="weui_icon_warn"></i>');
+									$preview.removeClass('weui-uploader__file_status')
+											.find('.weui-uploader__file-content')
+											.remove();
+								}
+							}
+							setTimeout(uploading, 30);
+						};
+						img.src = e.target.result;
+					};
+					reader.readAsDataURL(file);
+					count++;
+				}
+			});
+			
+		$uploaderFiles.on("click", "li", function() {
+          index = $(this).index();
+          $galleryImg.attr("style", this.getAttribute("style"));
+          $gallery.fadeIn(100);
+        });
+        
+        $gallery.on("click", function() {
+          $gallery.fadeOut(100);
+        });
+			
+		//删除图片 删除图片的代码也贴出来。
+        $(".weui-gallery__del").click(function() { 
+          console.log('删除');
+          $uploaderFiles.find("li").eq(index).remove();
+          count=0;
+        });
+			
+    
+  });
+</script>
+<script>
+function upload(){
+if(flag==1){
+ form[0].submit(function(){
+   });
+}else{
+$.alert({text : '请选择头像文件！'});
+	}
+}
+</script>
+
+<script src="js/jquery-weui.js"></script>
+<link type="text/css" rel="stylesheet" href="<%=basePath%>static/js/uploadify/uploadify.css"/>
+<script type="text/javascript" src="<%=basePath%>static/js/uploadify/jquery.uploadify.js"></script>
+</body>
+</html>

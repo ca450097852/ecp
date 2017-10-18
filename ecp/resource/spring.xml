@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+">
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<!-- 自动扫描(自动注入) -->
+	<context:component-scan base-package="com" >
+ 
+        <context:include-filter type="regex" expression="com.hontek.*.dao.*DaoImpl.*" />
+ 
+        <context:include-filter type="regex" expression="com.hontek.*.service.*ServiceImpl.*" />
+        
+        <context:include-filter type="regex" expression="com.hontek.*.controller.*Controller.*" />
+                
+    </context:component-scan>
+	
+	<!-- 自动扫描(自动注入) -->
+	<context:component-scan base-package="com.web" > 
+        
+        <context:include-filter type="regex" expression="com.web.*.controller.*Controller.*" />
+                
+    </context:component-scan>
+	<!-- 自动扫描(自动注入) -->
+	<context:component-scan base-package="com.wap" > 
+        
+        <context:include-filter type="regex" expression="com.wap.*.controller.*Controller.*" />
+                
+    </context:component-scan>
+    
+    
+    <!-- 上传文件 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+</beans>

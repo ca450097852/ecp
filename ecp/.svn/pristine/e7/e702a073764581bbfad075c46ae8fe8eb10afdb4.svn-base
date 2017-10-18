@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.info.dao.BannerDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.info.modelDO.Banner" >
+    <id column="img_id" property="imgId" jdbcType="INTEGER" />
+    <result column="img_type" property="imgType" jdbcType="INTEGER" />
+    <result column="img_name" property="imgName" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="sts" property="sts" jdbcType="VARCHAR" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="crttime" property="crttime" jdbcType="VARCHAR" />
+    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    img_id, img_type, img_name, img_url, sts, seq, crttime, link_url, user_id
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_banner
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_banner
+    where img_id in (#{ids,jdbcType=VARCHAR})
+  </delete>
+  
+  
+  <insert id="add" parameterType="com.hontek.info.modelDO.Banner" >
+    insert into tb_banner (img_id, img_type, img_name, 
+      img_url, sts, seq, crttime, 
+      link_url, user_id)
+    values (#{imgId,jdbcType=INTEGER}, #{imgType,jdbcType=INTEGER}, #{imgName,jdbcType=VARCHAR}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{sts,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, #{crttime,jdbcType=VARCHAR}, 
+      #{linkUrl,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.info.modelDO.Banner" >
+    update tb_banner
+    <set >
+      <if test="imgType != null" >
+        img_type = #{imgType,jdbcType=INTEGER},
+      </if>
+      <if test="imgName != null" >
+        img_name = #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sts != null" >
+        sts = #{sts,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null" >
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="crttime != null" >
+        crttime = #{crttime,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateBy" parameterType="com.hontek.info.modelDO.Banner" >
+    update tb_banner
+    set img_type = #{imgType,jdbcType=INTEGER},
+      img_name = #{imgName,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      sts = #{sts,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      crttime = #{crttime,jdbcType=VARCHAR},
+      link_url = #{linkUrl,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR}
+    where img_id = #{imgId,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getCommon" >
+		<if test="params != null and params.imgType != null and params.imgType != ''"> 
+			and  img_type = #{params.imgType,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.sts != null and params.sts != ''"> 
+			and  sts = #{params.sts,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.imgName != null and params.imgName != ''"> 
+			and  INSTR(img_name,#{params.imgName,jdbcType=VARCHAR})>0 
+		</if>
+  	</sql>
+  	
+ 	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select
+		<include refid="Base_Column_List" />
+		from tb_banner where 1=1 
+		<include refid="getCommon" />
+		<if test="sort == null or sort == ''"> 
+			order by seq asc
+		</if>
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Integer"  parameterType="com.hontek.comm.util.SearchPageUtil">
+	    select count(*) from tb_banner where 1=1 
+	    <include refid="getCommon" />
+	</select>
+  
+</mapper>

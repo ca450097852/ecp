@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.member.dao.MemberUserDao" >
+
+  <resultMap id="BaseResultMap" type="com.hontek.member.model.TbMemberUser" >
+    <id column="member_user_id" property="memberUserId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="hometown" property="hometown" jdbcType="VARCHAR" />
+    <result column="member_state" property="memberState" jdbcType="VARCHAR" />
+    <result column="head_photo" property="headPhoto" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    member_user_id, member_id, account, password, real_name, nickname, sex, birthday, 
+    hometown, member_state, head_photo, reg_time
+  </sql>
+  
+  <select id="findPageList" parameterType="com.hontek.comm.util.SearchPageUtil" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_user where 1 = 1 
+    <if test="params != null and params.memberId != null and params.memberId != ''"> 
+		and member_id = #{params.memberId,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+    <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		SELECT COUNT(*) ct from tb_member_user where 1 = 1
+    <if test="params != null and params.memberId != null and params.memberId != ''"> 
+		and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+	</select>
+	
+    <select id="findNameExists" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) ct from tb_member_user where account= #{account,jdbcType=VARCHAR}
+	</select>
+  
+  <select id="loginMemberUser" parameterType="com.hontek.member.model.TbMemberUser" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_user where 1 = 1 
+    <if test="account != null and account != ''"> 
+		and account = #{account,jdbcType=VARCHAR}
+	</if>
+	
+	 <if test="password != null and password != ''"> 
+		and password = #{password,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  
+  <select id="findMemberUserByAccount" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_user where 1 = 1 and account = #{account,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from tb_member_user
+    where member_user_id = #{memberUserId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.hontek.member.model.TbMemberUser" >
+    insert into tb_member_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberUserId != null" >
+        member_user_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="hometown != null" >
+        hometown,
+      </if>
+      <if test="memberState != null" >
+        member_state,
+      </if>
+      <if test="headPhoto != null" >
+        head_photo,
+      </if>
+      <if test="regTime != null" >
+        reg_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberUserId != null" >
+        #{memberUserId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="hometown != null" >
+        #{hometown,jdbcType=VARCHAR},
+      </if>
+      <if test="memberState != null" >
+        #{memberState,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhoto != null" >
+        #{headPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        #{regTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.member.model.TbMemberUser" >
+    update tb_member_user
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="hometown != null" >
+        hometown = #{hometown,jdbcType=VARCHAR},
+      </if>
+      <if test="memberState != null" >
+        member_state = #{memberState,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhoto != null" >
+        head_photo = #{headPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        reg_time = #{regTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where member_user_id = #{memberUserId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByMemberId" parameterType="com.hontek.member.model.TbMemberUser" >
+    update tb_member_user
+    <set >
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="hometown != null" >
+        hometown = #{hometown,jdbcType=VARCHAR},
+      </if>
+      <if test="memberState != null" >
+        member_state = #{memberState,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhoto != null" >
+        head_photo = #{headPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        reg_time = #{regTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
+  
+  
+   <select id="findObjectList" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_user where member_id = #{memberId,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  
+</mapper>

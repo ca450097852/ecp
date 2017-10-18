@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.PaymentDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbPayment" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="pay_id" property="payId" jdbcType="INTEGER" />
+    <result column="member_id_sale" property="memberIdSale" jdbcType="INTEGER" />
+    <result column="member_id_buy" property="memberIdBuy" jdbcType="INTEGER" />
+    <result column="order_amount" property="orderAmount" jdbcType="VARCHAR" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="pay_way" property="payWay" jdbcType="VARCHAR" />
+    <result column="pay_account" property="payAccount" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="receiver_account" property="receiverAccount" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, pay_id, member_id_sale, member_id_buy, order_amount, order_state, pay_way, 
+    pay_account, pay_time, pay_no, receiver_account, receiver
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_payment
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbPayment" >
+    insert into tb_payment (order_id, pay_id, member_id_sale, 
+      member_id_buy, order_amount, order_state, 
+      pay_way, pay_account, pay_time, 
+      pay_no, receiver_account, receiver
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{payId,jdbcType=INTEGER}, #{memberIdSale,jdbcType=INTEGER}, 
+      #{memberIdBuy,jdbcType=INTEGER}, #{orderAmount,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, 
+      #{payWay,jdbcType=VARCHAR}, #{payAccount,jdbcType=VARCHAR}, #{payTime,jdbcType=VARCHAR}, 
+      #{payNo,jdbcType=VARCHAR}, #{receiverAccount,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}
+      )
+  </insert>
+ 
+  <update id="update" parameterType="com.hontek.order.model.TbPayment" >
+    update tb_payment
+    set pay_id = #{payId,jdbcType=INTEGER},
+      member_id_sale = #{memberIdSale,jdbcType=INTEGER},
+      member_id_buy = #{memberIdBuy,jdbcType=INTEGER},
+      order_amount = #{orderAmount,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      pay_way = #{payWay,jdbcType=VARCHAR},
+      pay_account = #{payAccount,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=VARCHAR},
+      pay_no = #{payNo,jdbcType=VARCHAR},
+      receiver_account = #{receiverAccount,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+  
+  	<sql id="getCommon" >
+    from tb_payment where 1 = 1 
+    <if test="params != null and params.orderId != null" >
+    and order_id = #{params.orderId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+	
+	<!--  查询对象 -->
+	<select id="findTbPaymentByParam" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchMapUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	
+  
+</mapper>

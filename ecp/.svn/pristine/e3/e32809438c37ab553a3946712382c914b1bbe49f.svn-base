@@ -1,0 +1,82 @@
+package com.hontek.goods.service;
+
+import com.hontek.comm.model.Grid;
+import com.hontek.comm.util.DateUtil;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.comm.util.UUIDUtil;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hontek.goods.dao.RecommendGoodsDao;
+import com.hontek.goods.model.RecommendGoods;
+
+/**
+ * 
+* <p>Title: 推荐商品 service实现类</p>
+* <p>Description: </p>
+* <p>Copyright: Copyright (c) 2017</p>
+* <p>Company: **公司</p>
+* @version 1.0
+ */
+@Service("recommendGoodsService")
+public class RecommendGoodsServiceImpl implements RecommendGoodsService {
+	private Logger logger = Logger.getLogger(RecommendGoodsServiceImpl.class);
+	
+	@Autowired
+	private RecommendGoodsDao recommendGoodsDao;
+
+	
+	@Override
+	public Grid findPageList(SearchPageUtil page) {
+		List<RecommendGoods> rows = recommendGoodsDao.findPageList(page);
+		int total = recommendGoodsDao.getCount(page);
+		Grid grid = new Grid(total,rows);
+		return grid;
+	}
+
+	@Override
+	public String addRecommendGoods(RecommendGoods recommendGoods) {
+		String message = "添加商品推荐成功!";
+		try {
+			String rgId = UUIDUtil.getUUID();
+			recommendGoods.setRgId(rgId);
+			recommendGoods.setCreateTime(DateUtil.formatDateTime());
+			recommendGoodsDao.add(recommendGoods);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "添加商品推荐失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+
+	@Override
+	public String updateRecommendGoods(RecommendGoods recommendGoods) {
+		String message = "修改商品推荐成功!";
+		try {
+			recommendGoodsDao.update(recommendGoods);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "修改商品推荐失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+
+	@Override
+	public String deleteRecommendGoods(String ids) {
+		String message = "删除商品推荐成功!";
+		try {
+			recommendGoodsDao.delete(ids);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "删除商品推荐失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+}

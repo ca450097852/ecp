@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.RefundDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbRefund" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="refund_id" property="refundId" jdbcType="INTEGER" />
+    <result column="member_id_sale" property="memberIdSale" jdbcType="INTEGER" />
+    <result column="member_id_buy" property="memberIdBuy" jdbcType="INTEGER" />
+    <result column="order_amount" property="orderAmount" jdbcType="VARCHAR" />
+    <result column="cause" property="cause" jdbcType="VARCHAR" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="refund_account" property="refundAccount" jdbcType="VARCHAR" />
+    <result column="refund_time" property="refundTime" jdbcType="VARCHAR" />
+    <result column="refund_no" property="refundNo" jdbcType="VARCHAR" />
+    <result column="receiver_account" property="receiverAccount" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, refund_id, member_id_sale, member_id_buy, order_amount, cause, order_state, 
+    refund_account, refund_time, refund_no, receiver_account, receiver
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_refund
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbRefund" >
+    insert into tb_refund (order_id, refund_id, member_id_sale, 
+      member_id_buy, order_amount, cause, 
+      order_state, refund_account, refund_time, 
+      refund_no, receiver_account, receiver
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{refundId,jdbcType=INTEGER}, #{memberIdSale,jdbcType=INTEGER}, 
+      #{memberIdBuy,jdbcType=INTEGER}, #{orderAmount,jdbcType=VARCHAR}, #{cause,jdbcType=VARCHAR}, 
+      #{orderState,jdbcType=INTEGER}, #{refundAccount,jdbcType=VARCHAR}, #{refundTime,jdbcType=VARCHAR}, 
+      #{refundNo,jdbcType=VARCHAR}, #{receiverAccount,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.order.model.TbRefund" >
+    update tb_refund
+    set refund_id = #{refundId,jdbcType=INTEGER},
+      member_id_sale = #{memberIdSale,jdbcType=INTEGER},
+      member_id_buy = #{memberIdBuy,jdbcType=INTEGER},
+      order_amount = #{orderAmount,jdbcType=VARCHAR},
+      cause = #{cause,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      refund_account = #{refundAccount,jdbcType=VARCHAR},
+      refund_time = #{refundTime,jdbcType=VARCHAR},
+      refund_no = #{refundNo,jdbcType=VARCHAR},
+      receiver_account = #{receiverAccount,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <sql id="getCommon" >
+    from tb_refund where 1 = 1 
+    <if test="params != null and params.orderId != null" >
+    and order_id = #{params.orderId,jdbcType=INTEGER}
+    </if>
+     <if test="params != null and params.refundId != null" >
+    and refund_id = #{params.refundId,jdbcType=INTEGER}
+    </if>
+  </sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	<!--  查询对象 -->
+	<select id="findTbRefundByParam" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchMapUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+</mapper>

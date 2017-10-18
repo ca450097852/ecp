@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.member.dao.ShopDao" >
+
+  <resultMap id="BaseResultMap" type="com.hontek.member.model.TbShop" >
+    <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_type" property="shopType" jdbcType="VARCHAR" />
+    <result column="shop_main" property="shopMain" jdbcType="VARCHAR" />
+    <result column="shop_logo" property="shopLogo" jdbcType="VARCHAR" />
+    <result column="shop_addr" property="shopAddr" jdbcType="VARCHAR" />    
+    <result column="shop_desc" property="shopDesc" jdbcType="VARCHAR" />
+    <result column="shop_state" property="shopState" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="idcard_img1" property="idcardImg1" jdbcType="VARCHAR" />
+    <result column="idcard_img2" property="idcardImg2" jdbcType="VARCHAR" />
+    <result column="username" property="userName" jdbcType="VARCHAR" />
+    <result column="open_time" property="openTime" jdbcType="VARCHAR" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+	shop_id,member_id,shop_name,shop_type,shop_main,shop_logo,shop_desc,shop_state,idcard,idcard_img1,idcard_img2,username,shop_addr,open_time
+  </sql>
+  
+  <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select ts.*,tm.member_name  from tb_shop ts left join tb_member tm on ts.member_id=tm.member_id 
+    where 1 = 1 and ts.shop_id = #{shopId,jdbcType=INTEGER}
+    
+  </select>
+  
+  <select id="findPageList" parameterType="com.hontek.comm.util.SearchPageUtil" resultMap="BaseResultMap" >
+    select ts.*,tm.member_name  from tb_shop ts left join tb_member tm on ts.member_id=tm.member_id 
+    where 1 = 1 
+    <if test="params != null and params.memberId != null and params.memberId != ''"> 
+		and member_id = #{params.memberId,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+    <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		SELECT COUNT(*) ct from tb_shop where 1 = 1
+    <if test="params != null and params.memberId != null and params.memberId != ''"> 
+		and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+	</select>
+	
+	<!-- 查询店铺名称是否存在 -->
+    <select id="findNameExists" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) ct from tb_shop where shop_name= #{shopName,jdbcType=VARCHAR}
+	</select>
+  
+  	<!-- 查询是否已经开通店铺 -->
+     <select id="findObjectList" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+	    select ts.*,tm.member_name  from tb_shop ts left join tb_member tm on ts.member_id=tm.member_id  
+	   where  ts.member_id = #{memberId,jdbcType=INTEGER}
+	  </select>
+  
+  
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from tb_shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.hontek.member.model.TbShop" >
+    insert into tb_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="shopType != null" >
+        shop_type,
+      </if>
+      <if test="shopMain != null" >
+        shop_main,
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo,
+      </if>
+      <if test="shopAddr != null" >
+        shop_addr,
+      </if>
+      <if test="shopDesc != null" >
+        shop_desc,
+      </if>
+      <if test="shopState != null" >
+        shop_state,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="idcardImg1 != null" >
+        idcard_img1,
+      </if>
+      <if test="idcardImg2 != null" >
+        idcard_img2,
+      </if>
+      <if test="userName != null" >
+        username,
+      </if>
+      <if test="openTime != null" >
+        open_time
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null" >
+        #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopMain != null" >
+        #{shopMain,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopAddr != null" >
+        #{shopAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="shopDesc != null" >
+        #{shopDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="shopState != null" >
+        #{shopState,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardImg1 != null" >
+        #{idcardImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardImg2 != null" >
+        #{idcardImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null" >
+        #{openTime,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.member.model.TbShop" >
+    update tb_shop 
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopType != null" >
+        shop_type = #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopMain != null" >
+        shop_main = #{shopMain,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopAddr != null" >
+        shop_addr = #{shopAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="shopDesc != null" >
+        shop_desc = #{shopDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="shopState != null" >
+        shop_state = #{shopState,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardImg1 != null" >
+        idcard_img1 = #{idcardImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardImg2 != null" >
+        idcard_img2 = #{idcardImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        username = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null" >
+        open_time = #{openTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

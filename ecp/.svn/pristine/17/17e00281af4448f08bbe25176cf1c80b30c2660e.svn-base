@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.OrderDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="member_id_sale" property="memberIdSale" jdbcType="INTEGER" />
+    <result column="member_id_buy" property="memberIdBuy" jdbcType="INTEGER" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
+    <result column="finish_time" property="finishTime" jdbcType="VARCHAR" />
+    <result column="order_amount" property="orderAmount" jdbcType="VARCHAR" />
+    <result column="ship_free" property="shipFree" jdbcType="INTEGER" />
+    <result column="prefer_amount" property="preferAmount" jdbcType="INTEGER" />
+    <result column="invoice_type" property="invoiceType" jdbcType="VARCHAR" />
+    <result column="invoice_top" property="invoiceTop" jdbcType="VARCHAR" />
+    <result column="tax_invoice" property="taxInvoice" jdbcType="INTEGER" />
+    <result column="invoice_content" property="invoiceContent" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="INTEGER" />
+    <result column="discount_money" property="discountMoney" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="VARCHAR" />
+    <result column="pay_state" property="payState" jdbcType="VARCHAR" />
+    <result column="send_state" property="sendState" jdbcType="VARCHAR" />
+    <result column="pay_id" property="payId" jdbcType="INTEGER" />
+    <result column="deliver_type" property="deliverType" jdbcType="VARCHAR" />
+    <result column="logis_id" property="logisId" jdbcType="INTEGER" />
+    <result column="buy_remark" property="buyRemark" jdbcType="VARCHAR" />
+    <result column="evaluate_state" property="evaluateState" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="recommend" property="recommend" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, member_id_sale, member_id_buy, order_type, order_time, pay_time, send_time, 
+    finish_time, order_amount, ship_free, prefer_amount, invoice_type, invoice_top, tax_invoice, 
+    invoice_content, discount, discount_money, total_amount, order_state, pay_state, 
+    send_state, pay_id, deliver_type, logis_id, buy_remark,evaluate_state,recommend
+  </sql>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbOrder" >
+    insert into tb_order (order_id, member_id_sale, member_id_buy, 
+      order_type, order_time, pay_time, 
+      send_time, finish_time, order_amount, 
+      ship_free, prefer_amount, invoice_type, 
+      invoice_top, tax_invoice, invoice_content, 
+      discount, discount_money, total_amount, 
+      order_state, pay_state, send_state, 
+      pay_id, deliver_type, logis_id, 
+      buy_remark,evaluate_state,recommend)
+    values (#{orderId,jdbcType=INTEGER}, #{memberIdSale,jdbcType=INTEGER}, #{memberIdBuy,jdbcType=INTEGER}, 
+      #{orderType,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{payTime,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=VARCHAR}, #{finishTime,jdbcType=VARCHAR}, #{orderAmount,jdbcType=VARCHAR}, 
+      #{shipFree,jdbcType=INTEGER}, #{preferAmount,jdbcType=INTEGER}, #{invoiceType,jdbcType=VARCHAR}, 
+      #{invoiceTop,jdbcType=VARCHAR}, #{taxInvoice,jdbcType=INTEGER}, #{invoiceContent,jdbcType=VARCHAR}, 
+      #{discount,jdbcType=INTEGER}, #{discountMoney,jdbcType=INTEGER}, #{totalAmount,jdbcType=INTEGER}, 
+      #{orderState,jdbcType=VARCHAR}, #{payState,jdbcType=VARCHAR}, #{sendState,jdbcType=VARCHAR}, 
+      #{payId,jdbcType=INTEGER}, #{deliverType,jdbcType=VARCHAR}, #{logisId,jdbcType=INTEGER}, 
+      #{buyRemark,jdbcType=VARCHAR},#{evaluateState,jdbcType=VARCHAR},#{recommend,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  <update id="update" parameterType="com.hontek.order.model.TbOrder" >
+    update tb_order
+    set 
+    <trim prefix="" suffix="" suffixOverrides=",">
+    
+	    <if test="memberIdSale != null">
+	    member_id_sale = #{memberIdSale,jdbcType=INTEGER},
+	    </if>
+	    <if test="memberIdBuy != null">
+	    member_id_buy = #{memberIdBuy,jdbcType=INTEGER},
+	    </if>
+	    <if test="orderType != null">
+	    order_type = #{orderType,jdbcType=VARCHAR},
+	    </if>
+	    <if test="orderTime != null">
+	    order_time = #{orderTime,jdbcType=VARCHAR},
+	    </if>
+	    <if test="payTime != null">
+	    pay_time = #{payTime,jdbcType=VARCHAR},
+	    </if>
+	    <if test="sendTime != null">
+	    send_time = #{sendTime,jdbcType=VARCHAR},
+	    </if>
+	    <if test="finishTime != null">
+	    finish_time = #{finishTime,jdbcType=VARCHAR},
+	    </if>
+	    <if test="orderAmount != null">
+	    order_amount = #{orderAmount,jdbcType=VARCHAR},
+	    </if>
+	    <if test="shipFree != null">
+	    ship_free = #{shipFree,jdbcType=INTEGER},
+	    </if>
+	    <if test="preferAmount != null">
+	    prefer_amount = #{preferAmount,jdbcType=INTEGER},
+	    </if>
+	    <if test="invoiceType != null">
+	    invoice_type = #{invoiceType,jdbcType=VARCHAR},
+	    </if>
+	    <if test="invoiceTop != null">
+	    invoice_top = #{invoiceTop,jdbcType=VARCHAR},
+	    </if>
+	    <if test="taxInvoice != null">
+	    tax_invoice = #{taxInvoice,jdbcType=INTEGER},
+	    </if>
+	    <if test="invoiceContent != null">
+	    invoice_content = #{invoiceContent,jdbcType=VARCHAR},
+	    </if>
+	    <if test="discount != null">
+	    discount = #{discount,jdbcType=INTEGER},
+	    </if>
+	    <if test="discountMoney != null">
+	    discount_money = #{discountMoney,jdbcType=INTEGER},
+	    </if>
+	    <if test="totalAmount != null">
+	    total_amount = #{totalAmount,jdbcType=INTEGER},
+	    </if>
+	    <if test="orderState != null">
+	    order_state = #{orderState,jdbcType=VARCHAR},
+	    </if>
+	    <if test="payState != null">
+	     pay_state = #{payState,jdbcType=VARCHAR},
+	    </if>
+	    <if test="sendState != null">
+		send_state = #{sendState,jdbcType=VARCHAR},
+	    </if> 
+	    <if test="payId != null">
+		pay_id = #{payId,jdbcType=INTEGER},
+	    </if>
+	    <if test="deliverType != null">
+		 deliver_type = #{deliverType,jdbcType=VARCHAR},
+	    </if>
+	    <if test="logisId != null">
+		logis_id = #{logisId,jdbcType=INTEGER},
+	    </if>
+	    <if test="buyRemark != null">
+		buy_remark = #{buyRemark,jdbcType=VARCHAR},
+	    </if>
+	    <if test="evaluateState != null">
+		evaluate_state = #{evaluateState,jdbcType=VARCHAR}
+	    </if>
+	    <if test="recommend != null">
+		recommend = #{recommend,jdbcType=VARCHAR}
+	    </if>
+    </trim>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+	<sql id="getCommon" >
+    from tb_order where 1 = 1 
+    <if test="params != null and params.orderId != null" >
+    and order_id = #{params.orderId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.recommend != null" >
+    and recommend = #{params.recommend,jdbcType=VARCHAR}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	<select id="findPageListWithParam" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select too.* , tm1.member_name as memberIdSaleName , tm2.member_name as memberIdBuyName ,ts1.shop_name as shopName 
+		from tb_order too 
+		left join tb_member tm1 on too.member_id_sale = tm1.member_id 
+		left join tb_member tm2 on too.member_id_buy = tm2.member_id 
+		left join tb_shop ts1 on too.member_id_sale = ts1.member_id 
+		where 1=1 
+		<if test="params != null and params.memberIdSale != null ">
+		and too.member_id_sale = #{params.memberIdSale,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.orderId != null and params.orderId != ''">
+		and too.order_id = #{params.orderId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.memberIdBuy != null ">
+		and too.member_id_buy = #{params.memberIdBuy,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.orderState != null and params.orderState != ''">
+		and too.order_state = #{params.orderState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.payState != null and params.payState != ''">
+		and too.pay_state = #{params.payState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.sendState != null and params.sendState != ''">
+		and too.send_state = #{params.sendState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.evaluateState != null and params.evaluateState != ''">
+		and too.evaluate_state = #{params.evaluateState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.orderType != null and params.orderType != ''">
+		and too.order_type = #{params.orderType,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.beginTime != null and params.beginTime != ''">
+		and too.order_time &gt; #{params.beginTime,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.endTime != null and params.endTime != ''">
+		and too.order_time &lt; #{params.endTime,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.memberIdSaleName != null and params.memberIdSaleName != ''">
+		and tm1.member_name = #{params.memberIdSaleName,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.memberIdBuyName != null and params.memberIdBuyName != ''">
+		and tm2.member_name = #{params.memberIdBuyName,jdbcType=VARCHAR}
+		</if>
+		<if test="order != null ">
+		${order}
+		</if>
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+	
+	<select id="getCountWithParam" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) 
+		from tb_order too 
+		left join tb_member tm1 on too.member_id_sale = tm1.member_id 
+		left join tb_member tm2 on too.member_id_buy = tm2.member_id 
+		where 1=1 
+		<if test="params != null and params.memberIdSale != null ">
+		and too.member_id_sale = #{params.memberIdSale,jdbcType=INTEGER}
+		</if>
+	    <if test="params != null and params.orderId != null and params.orderId != ''">
+		and too.order_id = #{params.orderId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.memberIdBuy != null ">
+		and too.member_id_buy = #{params.memberIdBuy,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.orderState != null and params.orderState != ''">
+		and too.order_state = #{params.orderState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.payState != null and params.payState != ''">
+		and too.pay_state = #{params.payState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.sendState != null and params.sendState != ''">
+		and too.send_state = #{params.sendState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.evaluateState != null and params.evaluateState != ''">
+		and too.evaluate_state = #{params.evaluateState,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.orderType != null and params.orderType != ''">
+		and too.order_type = #{params.orderType,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.beginTime != null and params.beginTime != ''">
+		and too.order_time &gt; #{params.beginTime,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.endTime != null and params.endTime != ''">
+		and too.order_time &lt; #{params.endTime,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.memberIdSaleName != null and params.memberIdSaleName != ''">
+		and tm1.member_name = #{params.memberIdSaleName,jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.memberIdBuyName != null and params.memberIdBuyName != ''">
+		and tm2.member_name = #{params.memberIdBuyName,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+   <select id="findOrderByOrderId"  resultMap="BaseResultMap" resultType="java.lang.Integer">
+		SELECT * from tb_order where 
+	  order_id = #{orderId,jdbcType=INTEGER}
+	</select>
+  
+</mapper>

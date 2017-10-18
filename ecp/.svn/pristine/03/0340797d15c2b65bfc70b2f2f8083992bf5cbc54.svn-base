@@ -1,0 +1,93 @@
+package com.hontek.comm.filter;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.filter.OncePerRequestFilter;
+
+/**
+* 登录过滤
+* 
+* @author zh
+* @date 2015-2-27
+*/
+public class SessionFilter extends OncePerRequestFilter {
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response, FilterChain filterChain)throws ServletException, IOException {
+		// 请求的uri
+		String uri = request.getRequestURI();		
+		// uri中包含ecp(项目名称)时才进行过滤
+		if (uri.indexOf("ecp") != -1&&!"/ecp/".equalsIgnoreCase(uri)) {
+			// 是否过滤
+			//String arr[] = uri.split("/");
+			if (uri.indexOf("/ns/")<0&&uri.indexOf("login.")<0&&uri.indexOf("NoSession")<0) {
+				// 执行过滤
+				boolean flag = uri.indexOf(".action")!=-1;//true：前台 false:后台
+				String sessionName = "loginUser";
+				String loginPage = "/ecp/jsp/admin/login.jsp";//后台登陆页面
+				if(flag){//前台请求
+					sessionName = "memberUser";
+					loginPage = "/ecp/web/login/login.jsp";
+				}else if(uri.indexOf(".mobile")!=-1){//前台请求
+					sessionName = "memberUser";
+					loginPage = "/ecp/wap/login.jsp";
+				}
+				
+				// 从session中获取登录者实体
+				Object obj = request.getSession().getAttribute(sessionName);
+				
+				if (null == obj) {
+					StringBuilder builder = new StringBuilder();
+					if(isAjaxRequest(request)){//AJAX请求
+						builder.append("{\"rows\":{\"statusCode\":\""+(flag?"302":"301")+"\"}}");
+					}else{
+						builder.append("<script type=\"text/javascript\">");
+						builder.append("alert('会话过期，请重新登录！');");
+						builder.append("window.top.location.href='");
+						builder.append(loginPage);
+						builder.append("';");
+						builder.append("</script>");
+					}
+					// 如果session中不存在登录者实体，则弹出框提示重新登录
+					// 设置request和response的字符集，防止乱码
+					request.setCharacterEncoding("UTF-8");
+					response.setCharacterEncoding("UTF-8");
+		            response.setContentType("text/html;charset=UTF-8");             
+					PrintWriter out = response.getWriter();								
+					out.print(builder.toString());
+				} else {
+					// 如果session中存在登录者实体，则继续
+					filterChain.doFilter(request, response);
+				}
+			} else {
+				// 如果不执行过滤，则继续
+				filterChain.doFilter(request, response);
+			}
+		} else {
+			// 如果uri中不包含ecp，则继续
+			filterChain.doFilter(request, response);
+		}
+	}
+	
+	/** 判断是否为Ajax请求  
+     * <功能详细描述> 
+     * @param request 
+     * @return 是true, 否false  
+     */  
+    public static boolean isAjaxRequest(HttpServletRequest request)  
+    {  
+        String header = request.getHeader("X-Requested-With");   
+        if (header != null && "XMLHttpRequest".equals(header))   
+            return true;   
+        else   
+            return false;    
+    }  
+
+}
+

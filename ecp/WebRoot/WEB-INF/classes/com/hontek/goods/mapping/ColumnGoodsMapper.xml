@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.ColumnGoodsDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbColumnGoods">
+		<id column="cg_id" property="cgId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="column_id" property="columnId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		cg_id,goods_id,column_id
+	</sql>
+
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select <include refid="Base_Column_List"/> from tb_column_goods where 1=1 
+	</select>
+
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_column_goods where 1=1 
+	</select>
+	
+	<select id="findAllByGoodsId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select <include refid="Base_Column_List"/> from tb_column_goods where goods_id=${goodsId}
+	</select>
+	
+	<select id="findGoodsIdByColumnIds" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select DISTINCT goods_id from tb_column_goods where column_id in (${columnIds}) 
+	</select>
+
+	<insert id="add" parameterType="com.hontek.goods.model.TbColumnGoods">
+		insert into tb_column_goods (<include refid="Base_Column_List"/>) values (${cgId},${goodsId},${columnId})
+	</insert>
+
+	<update id="update" parameterType="com.hontek.goods.model.TbColumnGoods">
+		update tb_column_goods set column_id=${columnId},goods_id=${goodsId}, where cg_id=${cgId}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		delete from tb_column_goods where cg_id in (${ids})
+	</delete>
+	
+	<delete id="deleteColumnByGoodsId" parameterType="java.lang.String">
+	    delete from tb_column_goods where goods_id=${goodsId}
+	</delete>
+</mapper>

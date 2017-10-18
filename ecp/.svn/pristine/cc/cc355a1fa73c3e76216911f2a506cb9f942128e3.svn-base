@@ -1,0 +1,35 @@
+package com.hontek.order.service;
+
+import java.util.Map;
+
+import com.hontek.comm.model.Grid;
+import com.hontek.comm.util.SearchMapUtil;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.order.model.TbLogis;
+/**
+ * 
+ * @ClassName: LogisService
+ * @Description: TODO(发货物流信息表 Service)
+ * @date 2015-6-26 下午04:49:27
+ * @author qql
+ * @version 1.0
+ */
+public interface LogisService {
+
+	public String addLogis(TbLogis logis);
+	
+	public String deleteLogis(String ids);
+
+	public String updateLogis(TbLogis logis);
+
+	/**
+	 * 分页查询
+	 */
+	public Grid findLogisList(SearchPageUtil page);
+	
+	public TbLogis findTbLogisByParam(SearchMapUtil map);
+	
+	public TbLogis findTbLogisById(Integer logisId);
+	
+	public String modifyLogis(TbLogis logis);
+}

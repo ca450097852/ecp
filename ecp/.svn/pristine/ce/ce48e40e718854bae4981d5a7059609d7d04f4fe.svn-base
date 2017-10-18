@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.member.dao.MemberTradeDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.member.model.TbMemberTrade" >
+    <id column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="trade_flag" property="tradeFlag" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="opening_bank" property="openingBank" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    trade_id, member_id, trade_flag, card_num, opening_bank, bank_name
+  </sql>
+  
+  <select id="findPageList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_trade
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from tb_member_trade
+    where trade_id = #{tradeId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="add" parameterType="com.hontek.member.model.TbMemberTrade" >
+    insert into tb_member_trade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="tradeFlag != null" >
+        trade_flag,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="openingBank != null" >
+        opening_bank,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tradeId != null" >
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeFlag != null" >
+        #{tradeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBank != null" >
+        #{openingBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.member.model.TbMemberTrade" >
+    update tb_member_trade
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeFlag != null" >
+        trade_flag = #{tradeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBank != null" >
+        opening_bank = #{openingBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where trade_id = #{tradeId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

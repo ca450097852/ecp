@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.InventoryDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbInventory">
+		<id column="record_id" property="recordId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="old_count" property="oldCount" jdbcType="INTEGER" />
+		<result column="change_count" property="changeCount" jdbcType="INTEGER" />
+		<result column="change_time" property="changeTime" jdbcType="VARCHAR" />
+		<result column="change_type" property="changeType" jdbcType="VARCHAR" />
+		<result column="change_cause" property="changeCause" jdbcType="VARCHAR" />
+		
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="member_name" property="memberName" jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		record_id,goods_id,member_id,shop_id,old_count,change_count,change_time,change_type,change_cause
+	</sql>
+
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select ti.* , tg.goods_name , tm.member_name , ts.shop_name
+		from tb_inventory ti
+		Left join tb_goods tg on ti.goods_id = tg.goods_id
+		Left join tb_member tm on ti.member_id = tm.member_id
+		Left join tb_shop ts on ti.shop_id = ts.shop_id
+		where 1=1 
+		<if test="params.changeType!=null and params.changeType!=''"> and ti.change_type = #{params.changeType}</if>
+		<if test="params.beginTime!=null and params.beginTime!=''"> and ti.change_time &gt; #{params.beginTime}</if>
+		<if test="params.endTime!=null and params.endTime!=''"> and ti.change_time &lt; #{params.endTime}</if>
+		<if test="params.goodsName!=null and params.goodsName!=''"> and tg.goods_name like '%${params.goodsName}%'</if>
+		<if test="params.memberName!=null and params.memberName!=''"> and tm.member_name like '%${params.memberName}%'</if>
+		<if test="params.shopName!=null and params.shopName!=''"> and ts.shop_name like '%${params.shopName}%'</if>
+	</select>
+	
+	<select id="getCountWithPram" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_inventory ti 
+		Left join tb_goods tg on ti.goods_id = tg.goods_id
+		Left join tb_member tm on ti.member_id = tm.member_id
+		Left join tb_shop ts on ti.shop_id = ts.shop_id
+		where 1=1 
+		<if test="params.changeType!=null and params.changeType!=''"> and ti.change_type = #{params.changeType}</if>
+		<if test="params.beginTime!=null and params.beginTime!=''"> and ti.change_time &gt; #{params.beginTime}</if>
+		<if test="params.endTime!=null and params.endTime!=''"> and ti.change_time &lt; #{params.endTime}</if>
+		<if test="params.goodsName!=null and params.goodsName!=''"> and tg.goods_name like '%${params.goodsName}%'</if>
+		<if test="params.memberName!=null and params.memberName!=''"> and tm.member_name like '%${params.memberName}%'</if>
+		<if test="params.shopName!=null and params.shopName!=''"> and ts.shop_name like '%${params.shopName}%'</if>
+	</select>
+
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_inventory where 1=1 
+	</select>
+
+	<insert id="add" parameterType="com.hontek.goods.model.TbInventory">
+		insert into tb_inventory (<include refid="Base_Column_List"/>) values (${recordId},${goodsId},${memberId},${shopId},${oldCount},${changeCount},#{changeTime},#{changeType},#{changeCause})
+	</insert>
+
+	<update id="update" parameterType="com.hontek.goods.model.TbInventory">
+		update tb_inventory set change_cause=#{changeCause},change_type=#{changeType},change_time=#{changeTime},change_count=${changeCount},old_count=${oldCount},shop_id=${shopId},member_id=${memberId},goods_id=${goodsId}, where record_id=${recordId}
+	</update>
+	<delete id="delete" parameterType="java.lang.String">
+		delete from tb_inventory where record_id in (${ids})
+	</delete>
+</mapper>

@@ -1,0 +1,36 @@
+$(function(){
+	var totalAmount = getParamByName('total_amount');
+	var  payResult = getParamByName('payResult');
+	if(payResult=='true'){
+		$("#pay_result_img").attr('src','images/pay-success.png');
+		$("#pay_result").html('支付成功');
+	}
+	else{
+		$("#pay_result_img").attr('src','images/pay-fail.png');
+		$("#pay_result").html('很抱歉，您未能支付成功');
+	}
+	$("#total_amount").html(totalAmount);
+	$("#tolook").click(function(){
+		window.location.href='all_orders.jsp?tab=3';
+	});
+	$("#tobuy").click(function(){
+		window.location.href='index.jsp';
+	});
+});
+
+
+//通过参数名名称得到值
+function getParamByName(name){
+    var paramValue = null;
+    var url = window.location.href;    
+	var param_str = url.substr(url.indexOf("?")+1, url.length);
+	var params = param_str.split("&");
+	for(var i = 0; i < params.length; i ++) {
+	    var paramName = params[i].split("=")[0];
+		if(name==paramName){
+			paramValue = params[i].split("=")[1];
+			break;
+		} 	
+	}
+	return paramValue;
+}

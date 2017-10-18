@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.member.dao.MemberDao" >
+
+  <resultMap id="BaseResultMap" type="com.hontek.member.model.TbMember" >
+    <id column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
+    <result column="member_flag" property="memberFlag" jdbcType="VARCHAR" />
+    <result column="member_addr" property="memberAddr" jdbcType="VARCHAR" />
+    <result column="member_phone" property="memberPhone" jdbcType="VARCHAR" />
+    <result column="member_fax" property="memberFax" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="member_email" property="memberEmail" jdbcType="VARCHAR" />
+    <result column="member_website" property="memberWebsite" jdbcType="VARCHAR" />
+    <result column="member_desc" property="memberDesc" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="reg_money_type" property="regMoneyType" jdbcType="VARCHAR" />
+    <result column="reg_money" property="regMoney" jdbcType="VARCHAR" />
+    <result column="reg_date" property="regDate" jdbcType="VARCHAR" />
+    <result column="corporate" property="corporate" jdbcType="VARCHAR" />
+    <result column="license_num" property="licenseNum" jdbcType="VARCHAR" />
+    <result column="license_img" property="licenseImg" jdbcType="VARCHAR" />
+    <result column="member_score" property="memberScore" jdbcType="INTEGER" />
+    <result column="member_level" property="memberLevel" jdbcType="INTEGER" />
+    <result column="member_state" property="memberState" jdbcType="VARCHAR" />
+    <result column="reg_time" property="regTime" jdbcType="VARCHAR" />
+    
+     <result column="level_name" property="levelName" jdbcType="VARCHAR" />
+     <result column="level_name1" property="levelName1" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    member_id, member_name as memberName, member_flag, member_addr, member_phone, member_fax, post_code, 
+    member_email, member_website, member_desc, company_name, reg_money_type, reg_money, 
+    reg_date, corporate, license_num, license_img, member_score, member_level, member_state, 
+    reg_time
+  </sql>
+  
+  <select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+    select 
+    <include refid="Base_Column_List" />
+   ,lv2.level_name,lv1.level_name as level_name1 from tb_member  u left join 
+    tb_member_level2 lv1 on lv1.level_id=u.member_level2 left join 
+    tb_member_level lv2 on lv2.level_id=u.member_level where 1 = 1 
+    <if test="params != null and params.memberName != null and params.memberName != ''"> 
+		and member_name like '%${params.memberName}%' 
+	</if>
+  </select>
+
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		SELECT COUNT(*) ct from tb_member where 1 = 1 
+	    <if test="params != null and params.memberName != null and params.memberName != ''"> 
+			and member_name like '%${params.memberName}%' 
+		</if>
+	</select>
+  
+  	<select id="findNameExists" parameterType="java.lang.String" resultType="int">
+		SELECT COUNT(*) ct from tb_member where member_name= #{memberName,jdbcType=VARCHAR}
+	</select>
+  
+  
+    <select id="findObjectList" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member where member_id = #{memberId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from tb_member
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.hontek.member.model.TbMember" >
+    insert into tb_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="memberName != null" >
+        member_name,
+      </if>
+      <if test="memberFlag != null" >
+        member_flag,
+      </if>
+      <if test="memberAddr != null" >
+        member_addr,
+      </if>
+      <if test="memberPhone != null" >
+        member_phone,
+      </if>
+      <if test="memberFax != null" >
+        member_fax,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+      <if test="memberEmail != null" >
+        member_email,
+      </if>
+      <if test="memberWebsite != null" >
+        member_website,
+      </if>
+      <if test="memberDesc != null" >
+        member_desc,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="regMoneyType != null" >
+        reg_money_type,
+      </if>
+      <if test="regMoney != null" >
+        reg_money,
+      </if>
+      <if test="regDate != null" >
+        reg_date,
+      </if>
+      <if test="corporate != null" >
+        corporate,
+      </if>
+      <if test="licenseNum != null" >
+        license_num,
+      </if>
+      <if test="licenseImg != null" >
+        license_img,
+      </if>
+      <if test="memberScore != null" >
+        member_score,
+      </if>
+      <if test="memberLevel != null" >
+        member_level,
+      </if>
+      <if test="memberState != null" >
+        member_state,
+      </if>
+      <if test="regTime != null" >
+        reg_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="memberName != null" >
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberFlag != null" >
+        #{memberFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="memberAddr != null" >
+        #{memberAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="memberPhone != null" >
+        #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberFax != null" >
+        #{memberFax,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberEmail != null" >
+        #{memberEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="memberWebsite != null" >
+        #{memberWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="memberDesc != null" >
+        #{memberDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="regMoneyType != null" >
+        #{regMoneyType,jdbcType=VARCHAR},
+      </if>
+      <if test="regMoney != null" >
+        #{regMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="regDate != null" >
+        #{regDate,jdbcType=VARCHAR},
+      </if>
+      <if test="corporate != null" >
+        #{corporate,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseNum != null" >
+        #{licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseImg != null" >
+        #{licenseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="memberScore != null" >
+        #{memberScore,jdbcType=INTEGER},
+      </if>
+      <if test="memberLevel != null" >
+        #{memberLevel,jdbcType=INTEGER},
+      </if>
+      <if test="memberState != null" >
+        #{memberState,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        #{regTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.member.model.TbMember" >
+    update tb_member
+    <set >
+      <if test="memberName != null" >
+        member_name = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberFlag != null" >
+        member_flag = #{memberFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="memberAddr != null" >
+        member_addr = #{memberAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="memberPhone != null" >
+        member_phone = #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberFax != null" >
+        member_fax = #{memberFax,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberEmail != null" >
+        member_email = #{memberEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="memberWebsite != null" >
+        member_website = #{memberWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="memberDesc != null" >
+        member_desc = #{memberDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="regMoneyType != null" >
+        reg_money_type = #{regMoneyType,jdbcType=VARCHAR},
+      </if>
+      <if test="regMoney != null" >
+        reg_money = #{regMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="regDate != null" >
+        reg_date = #{regDate,jdbcType=VARCHAR},
+      </if>
+      <if test="corporate != null" >
+        corporate = #{corporate,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseNum != null" >
+        license_num = #{licenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseImg != null" >
+        license_img = #{licenseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="memberScore != null" >
+        member_score = #{memberScore,jdbcType=INTEGER},
+      </if>
+      <if test="memberLevel != null" >
+        member_level = #{memberLevel,jdbcType=INTEGER},
+      </if>
+      <if test="memberState != null" >
+        member_state = #{memberState,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        reg_time = #{regTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

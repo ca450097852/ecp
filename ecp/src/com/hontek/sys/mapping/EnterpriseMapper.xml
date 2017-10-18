@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.sys.dao.EnterpriseDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.sys.model.TsEnterprise" >
+    <id column="ent_id" property="entId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="ent_name" property="entName" jdbcType="VARCHAR" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="simple_name" property="simpleName" jdbcType="VARCHAR" />
+    <result column="intro" property="intro" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="reg_addr" property="regAddr" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="dom_name" property="domName" jdbcType="VARCHAR" />
+    <result column="ent_type" property="entType" jdbcType="INTEGER" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="sts" property="sts" jdbcType="VARCHAR" />
+    <result column="crt_time" property="crtTime" jdbcType="VARCHAR" />
+    <result column="crt_user_id" property="crtUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ent_id, parent_id, account, ent_name as entName, seq, simple_name, intro, phone, fax, tel, reg_addr, 
+    post_code, email, logo_url, dom_name, ent_type, flag, sts, crt_time, crt_user_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ts_enterprise
+    where ent_id = #{entId,jdbcType=INTEGER}
+  </select>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from ts_enterprise
+    where ent_id = #{entId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.sys.model.TsEnterprise" >
+    insert into ts_enterprise (ent_id, parent_id, account, 
+      ent_name, seq, simple_name, 
+      intro, phone, fax, 
+      tel, reg_addr, post_code, 
+      email, logo_url, dom_name, 
+      ent_type, flag, sts, 
+      crt_time, crt_user_id)
+    values (#{entId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, 
+      #{entName,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, #{simpleName,jdbcType=VARCHAR}, 
+      #{intro,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{regAddr,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{domName,jdbcType=VARCHAR}, 
+      #{entType,jdbcType=INTEGER}, #{flag,jdbcType=VARCHAR}, #{sts,jdbcType=VARCHAR}, 
+      #{crtTime,jdbcType=VARCHAR}, #{crtUserId,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="com.hontek.sys.model.TsEnterprise" >
+    update ts_enterprise
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      account = #{account,jdbcType=VARCHAR},
+      ent_name = #{entName,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      simple_name = #{simpleName,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      reg_addr = #{regAddr,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      dom_name = #{domName,jdbcType=VARCHAR},
+      ent_type = #{entType,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=VARCHAR},
+      sts = #{sts,jdbcType=VARCHAR},
+      crt_time = #{crtTime,jdbcType=VARCHAR},
+      crt_user_id = #{crtUserId,jdbcType=VARCHAR}
+    where ent_id = #{entId,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getCommon" >
+    from ts_enterprise where 1 = 1 
+    <if test="params != null and params.entId != null" >
+    and ent_id = #{params.entId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.entName != null and params.entName != ''" >
+    and  INSTR(ent_name,#{params.entName,jdbcType=VARCHAR})>0 
+    </if>
+    <if test="params != null and params.account != null and params.account != ''" >
+    and account = #{params.account,jdbcType=VARCHAR}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+  
+  
+  <resultMap id="TreeMap" type="com.hontek.comm.model.Tree" >
+    <id column="ent_id" property="id" jdbcType="INTEGER" />
+    <result column="ent_name" property="text" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getEntTree" parameterType="java.lang.Integer"  resultMap="TreeMap">
+		select ent_id as id,ent_name as text 
+		from ts_enterprise where 1 =1 
+		and parent_id = #{parentId,jdbcType=INTEGER}
+	</select>
+	
+	
+</mapper>

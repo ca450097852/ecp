@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.collect.dao.CollectDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.collect.model.Collect">
+		<id column="collect_id" property="collectId" jdbcType="INTEGER" />
+		<result column="menber_id" property="menberId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="collect_type" property="collectType" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+	collect_id,menber_id,goods_id,shop_id,create_time,collect_type
+	</sql>
+
+	
+
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_collect where 1=1 
+	<if test="params != null and params.menberId != null" >
+   	 	and menber_id = #{params.menberId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.collectType != null" >
+    and COLLECT_TYPE = #{params.collectType,jdbcType=VARCHAR}
+    </if>
+	</select>
+	
+	<select id="findAllByGoodsId" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select <include refid="Base_Column_List"/> from tb_collect where collect_id=${collectId}
+	</select>
+	<!-- 结果集（包含goods） -->
+	<resultMap id="BaseResultMap2" type="com.hontek.collect.model.Collect" >
+    	<id column="collect_id" property="collectId" jdbcType="INTEGER" />
+		<result column="menber_id" property="menberId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="collect_type" property="collectType" jdbcType="VARCHAR" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+		<result column="goods_img" property="goodsImg" jdbcType="VARCHAR"/>
+		<result column="saled_price" property="saledPrice" jdbcType="FLOAT"/>
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
+		<result column="shop_logo" property="shopLog" jdbcType="VARCHAR"/>
+		<result column="shop_desc" property="shopDesc" jdbcType="VARCHAR"/>
+  </resultMap>
+	<!--  不分页查询列表 -->
+	<select id="findList" resultMap="BaseResultMap2" parameterType="com.hontek.collect.model.Collect">
+		select goods_name, goods_img,saled_price,c.goods_Id,shop_name,shop_logo,shop_desc,collect_type,collect_id,c.shop_id
+  		from tb_collect c LEFT JOIN tb_goods g on c.goods_id=g.goods_id 
+  		 LEFT JOIN tb_shop s on c.shop_id=s.shop_id
+	    where menber_id = #{menberId,jdbcType=INTEGER}
+	    <if test="goodsId != null  and goodsId !=''" >
+	    and c.goods_Id = #{goodsId,jdbcType=INTEGER}
+	    </if>
+	    <if test="shopId != null  and shopId !=''" >
+	    and c.shop_Id = #{shopId,jdbcType=INTEGER}
+	    </if>
+	    and collect_type=#{collectType,jdbcType=VARCHAR}
+	   	ORDER BY c.create_time
+	</select>
+<select id="findPageList" resultMap="BaseResultMap2" parameterType="com.hontek.comm.util.SearchPageUtil">
+	select goods_name, goods_img,saled_price,c.goods_Id,shop_name,shop_logo,shop_desc,collect_type,collect_id,c.create_time,c.shop_id
+  		from tb_collect c LEFT JOIN tb_goods g on c.goods_id=g.goods_id 
+  		 LEFT JOIN tb_shop s on c.shop_id=s.shop_id
+	    where menber_id = #{params.menberId,jdbcType=INTEGER}
+	    <if test="params.goodsId != null  and params.goodsId !=''" >
+	    and c.goods_Id = #{params.goodsId,jdbcType=INTEGER}
+	    </if>
+	    and collect_type=#{params.collectType,jdbcType=VARCHAR}
+	   	ORDER BY c.create_time
+	</select>
+	<insert id="add" parameterType="com.hontek.collect.model.Collect">
+	
+	insert into tb_collect
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="collectId != null">
+				collect_id,
+			</if>
+			<if test="menberId != null">
+				menber_id,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="collectType != null">
+				collect_type,
+			</if>
+			
+			
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="collectId != null">
+				#{collectId,jdbcType=INTEGER},
+			</if>
+			<if test="menberId != null">
+				#{menberId,jdbcType=INTEGER},
+			</if>
+				<if test="goodsId != null">
+				#{goodsId,jdbcType=INTEGER},
+			</if>
+				<if test="shopId != null">
+				#{shopId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=VARCHAR},
+			</if>
+			<if test="collectType != null">
+				#{collectType,jdbcType=VARCHAR},
+			</if>
+			
+		</trim>
+	
+	</insert>
+
+	<update id="update" parameterType="com.hontek.collect.model.Collect">
+		
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from tb_collect where collect_id =#{collectId,jdbcType=INTEGER}
+	</delete>
+	
+	
+</mapper>

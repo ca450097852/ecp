@@ -1,0 +1,107 @@
+package com.wap.collect.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.hontek.collect.model.Collect;
+import com.hontek.collect.service.CollectService;
+import com.hontek.comm.base.BaseController;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.member.model.TbMemberUser;
+
+/**
+ * <p>Title:收藏控制器类</p>
+ * <p>Description: 收藏表</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: **公司</p>
+ * @author cjn
+ * @version 1.0
+ */
+
+@Controller
+@RequestMapping("wap/collect")
+public class WapCollectController extends BaseController{
+	private CollectService collectService;
+	
+	
+	
+	@Autowired
+	public void setCollectService(CollectService collectService) {
+		this.collectService = collectService;
+	}
+
+	/**
+	 * 添加
+	 * @param collect
+	 * @param response
+	 */
+	@RequestMapping("add")
+	public void addCollect(Collect collect,HttpServletResponse response,HttpSession session){
+		TbMemberUser tbMemberUser = (TbMemberUser)session.getAttribute("memberUser");
+		collect.setMenberId(tbMemberUser.getMemberId());
+		
+		writeJson2View(collectService.addCollect(collect, session), response);
+	}
+	
+	/**
+	 * 修改
+	 * @param collect
+	 * @param response
+	 */
+	@RequestMapping("update")
+	public void updateCollect(Collect collect,HttpServletResponse response,HttpSession session){
+		TbMemberUser tbMember = (TbMemberUser)session.getAttribute("memberUser");
+		collect.setMenberId(tbMember.getMemberId());
+		writeJson2View(collectService.updateCollect(collect), response);
+	}
+	
+	/**
+	 * 删除
+	 * @param ids
+	 * @param response
+	 */
+	@RequestMapping("delete")
+	public void deleteCollect(String ids,HttpServletResponse response){
+		writeJson2View(collectService.deleteCollect(ids), response);
+	}
+	/**
+	 * 列表查询
+	 * @param pageUtil
+	 * @param response
+	 */
+	@RequestMapping("list")
+	public void findList(HttpServletResponse response,Collect collect,HttpSession session){
+		TbMemberUser tbMember = (TbMemberUser)session.getAttribute("memberUser");
+		if(tbMember != null) {
+			collect.setMenberId(tbMember.getMemberId());
+			List<Collect> list = collectService.findCollectList(collect);
+			writeJson2View(list, response);
+		}
+	}
+	
+	/**
+	 * 获取收藏总数
+	 * @param pageUtil
+	 * @param response
+	 */
+	@RequestMapping("ns/getCount")
+	public void getCount(Collect collect,HttpServletResponse response){
+		
+		int count=0;
+		if(collect!=null&&collect.getShopId()!=0){
+			SearchPageUtil pageUtil=new SearchPageUtil();
+			Map<String, Object> params = pageUtil.getParams();
+			params.put("shopId", collect.getShopId());
+			 count = collectService.getCount(pageUtil);
+		}
+		writeJson2View(count, response);
+	}
+	
+}

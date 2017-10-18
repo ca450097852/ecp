@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.sys.dao.SysColDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.sys.model.TsSysCol">
+		<id column="col_id" property="colId" jdbcType="INTEGER" />
+		<result column="col_name" property="colName" jdbcType="VARCHAR" />
+		<result column="parent_id" property="_parentId" jdbcType="INTEGER" />
+		<result column="col_url" property="colUrl" jdbcType="VARCHAR" />
+		<result column="col_level" property="colLevel" jdbcType="INTEGER" />
+		<result column="seq" property="seq" jdbcType="INTEGER" />	
+		<result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />			
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />		
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		col_id, col_name, parent_id, col_url, col_level, seq, icon_url, remarks
+	</sql>
+	
+	<!--  查询列表 -->
+	<select id="findList" resultMap="BaseResultMap" parameterType="com.hontek.sys.model.TsSysCol">
+		select  <include refid="Base_Column_List" /> from ts_sys_col <if test="_parentId != null" > where parent_id = #{_parentId,jdbcType=INTEGER}</if>  order by seq
+	</select>
+	
+	
+	<!--  修改  -->  
+	<update id="update" parameterType="com.hontek.sys.model.TsSysCol">
+		update ts_sys_col 
+		<set >
+	      <if test="colName != null" >
+	        col_name = #{colName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="_parentId != null" >
+	        parent_id = #{_parentId,jdbcType=INTEGER},
+	      </if>
+	      <if test="colUrl != null" >
+	        col_url = #{colUrl,jdbcType=VARCHAR},
+	      </if>
+	      <if test="colLevel != null" >
+	        col_level = #{colLevel,jdbcType=INTEGER},
+	      </if>
+	      <if test="seq != null" >
+	        seq = #{seq,jdbcType=INTEGER},
+	      </if>
+	      <if test="iconUrl != null" >
+	        icon_url = #{iconUrl,jdbcType=VARCHAR},
+	      </if>
+	      <if test="remarks != null" >
+	        remarks = #{remarks,jdbcType=VARCHAR},
+	      </if>
+	      
+	    </set>
+		where col_id = #{colId,jdbcType=INTEGER}
+	</update>
+	
+	<!--  添加记录  -->  
+	<insert id="add" parameterType="com.hontek.sys.model.TsSysCol">
+		insert into ts_sys_col(col_id,col_name,parent_id,col_url,col_level,seq,icon_url,remarks)
+		values (#{colId,jdbcType=INTEGER}, 
+				#{colName,jdbcType=VARCHAR}, 
+				#{_parentId,jdbcType=INTEGER}, 
+				#{colUrl,jdbcType=VARCHAR},
+				#{colLevel,jdbcType=VARCHAR}, 
+				#{seq,jdbcType=INTEGER}, 
+				#{iconUrl,jdbcType=VARCHAR}, 
+				#{remarks,jdbcType=VARCHAR})
+	</insert>
+
+
+	  <resultMap id="TreeMap" type="com.hontek.comm.model.Tree" >
+    	<id column="col_id" property="id" jdbcType="INTEGER" />
+    	<result column="col_name" property="text" jdbcType="VARCHAR" />
+  	  </resultMap>
+  
+	  <select id="getSysColTree" parameterType="java.lang.Integer"  resultMap="TreeMap">
+			select col_id as id,col_name as text 
+			from ts_sys_col where 1 =1 
+			and parent_id = #{_parentId,jdbcType=INTEGER}
+	  </select>
+	  
+	  <select id="findAdminCol" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	  	SELECT * from ts_sys_col 
+	  	where parent_id = #{_parentId,jdbcType=INTEGER} 
+	  	order by seq asc
+	  </select>
+	  
+	  <select id="findRolePurvByRoleId" parameterType="com.hontek.sys.model.TsSysCol" resultMap="BaseResultMap">
+	  	SELECT 
+		<include refid="Base_Column_List" />
+		from ts_sys_col where 1=1 
+	  	and parent_id = #{_parentId,jdbcType=INTEGER} 
+	  	and col_id in (select col_id from ts_role_purv where role_id = #{roleId,jdbcType=INTEGER} ) 
+	  	order by seq asc
+	  </select>
+</mapper>

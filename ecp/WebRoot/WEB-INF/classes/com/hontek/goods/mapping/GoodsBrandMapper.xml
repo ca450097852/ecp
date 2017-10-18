@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.GoodsBrandDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbGoodsBrand">
+		<id column="BRAND_ID" property="brandId" jdbcType="INTEGER" />
+		
+		<result column="BRAND_NO" property="brandNo" jdbcType="VARCHAR" />
+		<result column="BRAND_NAME" property="brandName" jdbcType="VARCHAR" />
+		<result column="BRAND_LOGO" property="brandLogo" jdbcType="VARCHAR" />
+		<result column="STATE" property="state" jdbcType="INTEGER" />
+		<result column="BRAND_SEQ" property="brandSeq" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap type="com.hontek.comm.model.Tree" id="TreeVo">
+	    <id column="BRAND_ID" property="id" jdbcType="INTEGER"/>
+	    <result column="BRAND_NAME" property="text" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		BRAND_ID,BRAND_NO,BRAND_NAME,BRAND_LOGO,STATE,BRAND_SEQ
+	</sql>
+	
+	<!--  查询记录  -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select <include refid="Base_Column_List"/> from tb_goods_brand where 1=1 
+		<if test="params.brandNo !=null"> and brand_no like '%${params.brandNo}%' </if>
+		<if test="params.brandName !=null"> and brand_name like '%${params.brandName}%'</if>
+	</select>
+	
+	<select id="getCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	    select count(*) from tb_goods_brand where 1=1 
+		<if test="brandNo !=null"> and brand_no like '%${brandNo}%' </if>
+		<if test="brandName !=null"> and brand_name like '%${brandName}%'</if>
+	</select>
+	
+	<insert id="add" parameterType="com.hontek.goods.model.TbGoodsBrand">
+	    insert into tb_goods_brand (<include refid="Base_Column_List"/>) 
+	    values (${brandId},#{brandNo},#{brandName},#{brandLogo},${state},${brandSeq})
+	</insert>
+	
+	<delete id="delete" parameterType="java.lang.String">
+	    delete from tb_goods_brand where brand_id in (#{ids})
+	</delete>
+	
+	<update id="update" parameterType="com.hontek.goods.model.TbGoodsBrand">
+	    update tb_goods_brand set brand_no=#{brandNo},brand_name=#{brandName},brand_logo=#{brandLogo},state=${state},brand_seq=${brandSeq}
+	    where brand_id=${brandId}
+	</update>
+	
+	<select id="getBrandList" resultMap="BaseResultMap">
+	    select <include refid="Base_Column_List"/> from tb_goods_brand where STATE = 1
+	</select>
+	
+	<select id="findForTree" resultMap="TreeVo">
+	    select BRAND_ID,BRAND_NAME from tb_goods_brand
+	</select>
+
+</mapper>

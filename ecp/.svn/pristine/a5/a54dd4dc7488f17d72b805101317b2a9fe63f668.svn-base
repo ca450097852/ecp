@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.LogisDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbLogis" >
+    <id column="logis_id" property="logisId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="addr_id" property="addrId" jdbcType="VARCHAR" />
+    <result column="logis_way" property="logisWay" jdbcType="VARCHAR" />
+    <result column="logis_name" property="logisName" jdbcType="VARCHAR" />
+    <result column="logis_no" property="logisNo" jdbcType="VARCHAR" />
+    <result column="leave_word" property="leaveWord" jdbcType="VARCHAR" />
+    <result column="logis_time" property="logisTime" jdbcType="VARCHAR" />
+    <result column="receive_time" property="receiveTime" jdbcType="VARCHAR" />
+    <result column="receive_user" property="receiveUser" jdbcType="VARCHAR" />
+    
+    <!-- 关联查询扩展字段 -->
+    <result column="addr_area" property="addrArea" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="recipient" property="recipient" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    logis_id, order_id, addr_id, logis_way, logis_name, logis_no, leave_word, logis_time, 
+    receive_time, receive_user
+  </sql>
+ 
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_logis
+    where logis_id = #{logisId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbLogis" >
+    insert into tb_logis (logis_id, order_id, addr_id, 
+      logis_way, logis_name, logis_no, 
+      leave_word, logis_time, receive_time, 
+      receive_user)
+    values (#{logisId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{addrId,jdbcType=VARCHAR}, 
+      #{logisWay,jdbcType=VARCHAR}, #{logisName,jdbcType=VARCHAR}, #{logisNo,jdbcType=VARCHAR}, 
+      #{leaveWord,jdbcType=VARCHAR}, #{logisTime,jdbcType=VARCHAR}, #{receiveTime,jdbcType=VARCHAR}, 
+      #{receiveUser,jdbcType=VARCHAR})
+  </insert>
+ 
+  <update id="update" parameterType="com.hontek.order.model.TbLogis" >
+    update tb_logis
+    set order_id = #{orderId,jdbcType=INTEGER},
+      addr_id = #{addrId,jdbcType=VARCHAR},
+      logis_way = #{logisWay,jdbcType=VARCHAR},
+      logis_name = #{logisName,jdbcType=VARCHAR},
+      logis_no = #{logisNo,jdbcType=VARCHAR},
+      leave_word = #{leaveWord,jdbcType=VARCHAR},
+      logis_time = #{logisTime,jdbcType=VARCHAR},
+      receive_time = #{receiveTime,jdbcType=VARCHAR},
+      receive_user = #{receiveUser,jdbcType=VARCHAR}
+    where logis_id = #{logisId,jdbcType=INTEGER}
+  </update>
+  
+  
+    <sql id="getCommon" >
+    from tb_logis where 1 = 1 
+    <if test="params != null and params.orderId != null" >
+    and order_id = #{params.orderId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.logisNo != null and params.logisNo != ''" >
+    and  INSTR(logis_no,#{params.logisNo,jdbcType=VARCHAR})>0 
+    </if>
+  </sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	<select id="findTbLogisByParam" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchMapUtil">
+		SELECT
+			tl.*,tma.addr_area,tma.addr,tma.telephone,tma.mobile,tma.post_code ,tma.recipient
+		FROM
+			tb_logis tl
+		LEFT JOIN tb_member_addr tma ON tl.addr_id = tma.addr_id
+		WHERE 1=1
+	    and order_id = #{params.orderId,jdbcType=INTEGER}
+	</select>
+	
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+  
+   <select id="findTbLogisById"  resultMap="BaseResultMap" resultType="java.lang.Integer">
+		SELECT * from tb_logis where 
+	  logis_id = #{logisId,jdbcType=INTEGER}
+	</select>
+  
+  
+  
+</mapper>

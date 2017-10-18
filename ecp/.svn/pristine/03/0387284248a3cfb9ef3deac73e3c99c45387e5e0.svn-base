@@ -1,0 +1,26 @@
+package com.hontek.collect.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.hontek.collect.model.Collect;
+import com.hontek.comm.dao.BaseDao;
+
+
+
+/**
+ * <p>Title: 收藏DAO类</p>
+ * <p>Description: 收藏表</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: **公司</p>
+ * @author cjn
+ * @version 1.0
+ */
+public interface CollectDao extends BaseDao<Collect>{
+
+	public int delete(Integer t);
+	
+	public Collect findById(@Param("collectId")Integer collectId);
+	public List<Collect> findList(Collect collect) throws RuntimeException;
+}

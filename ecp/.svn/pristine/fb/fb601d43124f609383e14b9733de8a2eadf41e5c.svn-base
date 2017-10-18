@@ -1,0 +1,97 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>订单详情</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+<link rel="stylesheet" href="lib/weui.min.css">
+<link rel="stylesheet" href="css/jquery-weui.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body ontouchstart>
+<!--主体-->
+<header class="wy-header">
+  <div class="wy-header-icon-back" onclick="backspace()"><span></span></div>
+  <div class="wy-header-title">订单详情</div>
+</header>
+<div class="weui-content">
+<!--   <div class="wy-media-box weui-media-box_text address-select"> -->
+<!--     <div class="weui-media-box_appmsg"> -->
+<!--       <div class="weui-media-box__hd proinfo-txt-l" style="width:20px;"><span class="promotion-label-tit"><img src="images/icon_nav_city.png" /></span></div> -->
+<!--       <div class="weui-media-box__bd" id="address_list"> -->
+        
+<!--       </div> -->
+<!--       <div class="weui-media-box__hd proinfo-txt-l" style="width:16px;"><div class="weui-cell_access"><span class="weui-cell__ft"></span></div></div> -->
+<!--     </div> -->
+<!--   </div> -->
+  <div class="wy-media-box weui-media-box_text address-select">
+    <div class="weui-media-box_appmsg">
+      <div class="weui-media-box__hd proinfo-txt-l" style="width:20px;"><span class="promotion-label-tit"><img src="images/icon_nav_city.png" /></span></div>
+      <div class="weui-media-box__bd">
+        <a href="javascript:;" class="weui-cell_access">
+          <h4 class="address-name"><span id="recipient"></span><span id="mobile"></span></h4>
+          <div class="address-txt" id="addr"></div>
+          <input type="hidden"  id="addrId" />
+        </a>
+      </div>
+<!--       <div class="weui-media-box__hd proinfo-txt-l" style="width:16px;"><div class="weui-cell_access"><span class="weui-cell__ft"></span></div></div> -->
+    </div>
+  </div>
+ <div  id="orderInfo"></div>
+ 
+ 
+  <div class="wy-media-box weui-media-box_text">
+    <div class="mg10-0 t-c">总金额：<span class="wy-pro-pri mg-tb-5" id="orderAmount"></span></div>
+    <div class="mg10-0"><a href="shopcart.html" class="weui-btn weui-btn_primary">微信付款</a></div>
+    <div class="mg10-0"><a href="#" class="weui-btn" style="background-color:#1a83d4" id="alipayBtn">支付宝付款</a></div>
+  </div>
+</div>
+
+<div id="selectAddr" class='weui-popup__container' style="z-index:600;">
+  <div class="weui-popup__overlay" style="opacity:1;"></div>
+  <div class="weui-popup__modal">
+    <div class="modal-content">
+    
+    <div class="weui-panel address-box">
+    
+  </div>
+  <div class="weui-btn-area">
+    <a class="weui-btn weui-btn_primary" href="address_list.jsp" id="showTooltips">添加新地址</a>
+    
+    <a class="weui-btn  weui-btn_default close-popup" href="javascript:;" id="showTooltips">返回</a>
+  </div>
+      
+    </div>
+  </div>
+</div>
+<script src="lib/jquery-2.1.4.js"></script> 
+<script src="lib/fastclick.js"></script> 
+<script type="text/javascript" src="js/jquery.Spinner.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+    
+ 
+  });
+
+  
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".Spinner").Spinner({value:1, len:3, max:999});
+});
+</script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/order_info.js"></script> 
+
+</body>
+</html>
+

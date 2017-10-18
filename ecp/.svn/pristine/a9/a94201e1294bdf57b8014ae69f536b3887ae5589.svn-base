@@ -1,0 +1,86 @@
+﻿package com.hontek.comm.alipay;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+/* *
+ *类名：AlipayConfig
+ *功能：基础配置类
+ *详细：设置帐户有关信息及返回路径
+ *修改日期：2017-04-05
+ *说明：
+ *以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
+ *该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
+ */
+
+public class AlipayConfig {
+	
+//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+	// 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
+	public static String app_id = "2016081600254578";
+	
+	public static String buyerAccount = "1449756018@qq.com";
+	
+	// 商户私钥，您的PKCS8格式RSA2私钥
+    public static String merchant_private_key = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCL2pQX1Uj5syzFUoms6DjTmTo7cTYIcbQO1g6TcAsnQNo/HHD9MrZMBkGyNTDoNzg/jcQT+Yl7HSj5pg4yhxCnJMhk1Zpye67xHzf95EMaFQTkz2ErjVQ9fYH53TW7meletZxf8TghqIDIYh2C37H9qdNoBdEFh1qPLBNmhkKt41QOj1qW1pPdh3s7haJwvp469Ltohm7zgNsgazwyAgkPkmOflWC2twwBpFPi9om0uDl8bHLPunY3dsW/1qfY0AuFiYe+p+HbYlgHjSFR8OqAYtJrzFhBnzEA9hDJ/y4DMXitrs5aQu4Zq7fXB1QZ3JHpa3VlFfowfukYz3qGyQjDAgMBAAECggEAdBPAlSN+xVmU0FZYVP4NpHrqXUny2gFdvG6ofHEjoLnwKy+1DEKaEfGjd4E0jZi/g+hrlVSpaljimIrd/8wg40nhVegAoALOSe1qcL2TgENv42XItfhAsiTIy5VyMrpleylrmCpDN5R/B1KAQg7e0bax9AXX3ing3TJtC8xl7aKl1O3F72YGgy318v7CrO6TSj31ohq17GzD4CZDmojZvOm2foodjNZoIZjnYGvnc4Wii/rnglT0NFPr0sOYlOrU/FpabFPmuetpvb+2+O4n+rU2bQUdNXtO3UtDTn7u2qI3Eh9cfCvwcqVX+W7se0FdZszSA3koqO5SgbU3QAFjCQKBgQDFMa/dI1fG6UPbTUgyz3BRY73VBVXol3+/gtddZKq2/9alEGVH3Z0GnjorAHqHhGf/bkI+Uzb+hOU3iJ17zPailm9BTTLbGGN5CVBhyO2Dy5ac5KMXRbLRMUkf0+UM86dskKBDEErPRZY0kRYPtll6485U6jFpPNhVYRUTaj3XJwKBgQC1j2KpDx6E7EyBQ7VBdAQMLnV9ZNvSCUrUtLVgMGb1VrintX/GSQ90nNdKNDGySaDU3d3VVnOOxXHsdg4sbNIobanLmINoncIxs31NIsIyFLO7HZnFdssai6n7nOSKmN6DUD7QXGux9/h9oG5mJ9sFBjJBupGHAcPX8esW/XqjBQKBgQClXnXNTcZe2WA+mSDi+3OFzc90xXS2CdboFCHoAHPp48NtycIl8oOs+SRuy4f1/eP5Ic4L1l1YNLrFR5xKJijvUJkcelEby+gfqN/wIUCONj2odVUQPzMmm95nApwjsHHHacH8e71A9WpxyvplUtbXaBOwwnWNe6kwcKnsDjyuIQKBgCoATqmfdsb3R0eMG01WAm2y/bkRcQzo22fTmjXzXI4bDsK1aSa81hd7BQ8Efg6pm8xCu0PUKQ15Pb6fHO5ICmIR5HrWAGhePoNy62TByrz9Lwr1cRJORfQRJTSw+enaLXehQ7a9+qgEHncpewCk7bT+1vd/qpTZ4q19KI57+zflAoGACST6N4CXwfJS8eGww7/uM4tvecmuDKUnAMOSHUTxOu65fha3RDDgP1P7ncpKS9q4CwwqDSPyxg53lJoDKVJLdS6CQuRIz30swXMTAs1pJUY5i1nHvpvEc4QKNAt0QHv2CM7F0ovpqlyTrAYFAADqP/Co77LiAU0IaQo2xByfTfQ=";
+	
+	// 支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
+    public static String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy0HdgVm/frb56V1R+7aVHe4z2O4IugqqFPgLSeEGbhivfQGHq44dUlnfN0C7WORK06vHoYvODApgaApbfksSFAQ58bMNCC8MoiJ6L7gimc5mUaZnvncSxm+z6mKuXVGDJNWhLHbbJHns5qpaG/ruaEvXpC1OopYz8Et0GMx+M5qdN5eQEGm2vwfWvqG/NYkF6FfVbuZI5/DC5I+Yj6bHvkGJ2nJEaFxnZ2iZEYCSfIjLwoua+5zy/wILF/94J4gzkLpUMcKcbJRbGewZYXDAadtZmEEIa1Ox4y+7diMtCSHLrJJELCiiP1PyMPHN9UjcgaWn5q3YbT3vNUxrGwhXaQIDAQAB";
+
+	// 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+	public static String notify_url = "http://ljytest.hontek.com.cn/ecp/weborder/alipayNotify.action";
+	
+	// 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+	public static String return_url = "http://ljytest.hontek.com.cn/ecp/weborder/alipayReturn.action";
+	
+	//app同步返回地址
+	public static String app_return_url = "http://ljytest.hontek.com.cn/alipayTest/wappay/return_url.jsp";
+	
+	//app异步返回地址
+	public static String app_notify_url = "http://ljytest.hontek.com.cn/alipayTest/wappay/notify_url.jsp";
+
+	// 签名方式
+	public static String sign_type = "RSA2";
+
+	// 字符编码格式
+	public static String charset = "utf-8";
+	
+	
+	// 返回格式
+	public static String FORMAT = "json";
+	
+	// 支付宝正式网关
+	//public static String gatewayUrl = "https://openapi.alipay.com/gateway.do";
+	// 支付宝测试环境网关
+	public static String gatewayUrl  = "https://openapi.alipaydev.com/gateway.do";
+	
+	// 支付宝网关
+	public static String log_path = "C:\\";
+
+
+//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+    /** 
+     * 写日志，方便测试（看网站需求，也可以改成把记录存入数据库）
+     * @param sWord 要写入日志里的文本内容
+     */
+    public static void logResult(String sWord) {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(log_path + "alipay_log_" + System.currentTimeMillis()+".txt");
+            writer.write(sWord);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.ShelfDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbShelf">
+		<id column="shelf_id" property="shelfId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+		<result column="shelf_time" property="shelfTime" jdbcType="VARCHAR" />
+		<result column="shelf_type" property="shelfType" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		shelf_id,goods_id,member_id,shop_id,goods_count,shelf_time,shelf_type
+	</sql>
+
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select <include refid="Base_Column_List"/> from tb_shelf where 1=1 
+	</select>
+
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_shelf where 1=1 
+	</select>
+
+	<insert id="add" parameterType="com.hontek.goods.model.TbShelf">
+		insert into tb_shelf (<include refid="Base_Column_List"/>) values (${shelfId},${goodsId},${memberId},${shopId},${goodsCount},#{shelfTime},#{shelfType})
+	</insert>
+
+	<update id="update" parameterType="com.hontek.goods.model.TbShelf">
+		update tb_shelf set shelf_type=#{shelfType},shelf_time=#{shelfTime},goods_count=${goodsCount},shop_id=${shopId},member_id=${memberId},goods_id=${goodsId}, where shelf_id=${shelfId}
+	</update>
+	<delete id="delete" parameterType="java.lang.String">
+		delete from tb_shelf where shelf_id in (${ids})
+	</delete>
+</mapper>

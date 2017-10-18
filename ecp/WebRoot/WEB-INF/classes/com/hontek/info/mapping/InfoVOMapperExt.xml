@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.info.dao.InfoVOMapperExt" >
+  <resultMap id="BaseResultMap" type="com.hontek.info.modelVO.Info" >
+    <id column="info_id" property="infoId" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="crttime" property="crttime" jdbcType="VARCHAR" />
+    <result column="auditor" property="auditor" jdbcType="VARCHAR" />
+    <result column="audi_date" property="audiDate" jdbcType="VARCHAR" />
+    <result column="opinion" property="opinion" jdbcType="VARCHAR" />
+    <result column="rsts" property="rsts" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <select id="selectByParams" parameterType="com.hontek.comm.util.SearchPageUtil" resultMap="BaseResultMap">
+  	select ti.* , tit.type_name ,tu.user_name from tb_info ti left join tb_infotype tit on ti.type_id = tit.type_id
+  	left join ts_user tu on ti.user_id = tu.user_id where 1=1
+  	<trim prefix="" suffix="" prefixOverrides="" suffixOverrides=",">
+  	<if test="params.typeId != null" >
+        and type_id = #{params.typeId,jdbcType=INTEGER},
+      </if>
+      <if test="params.seq != null" >
+        and seq = #{params.seq,jdbcType=INTEGER},
+      </if>
+      <if test="params.userId != null" >
+        and user_id = #{params.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="params.crttime != null" >
+        and crttime = #{params.crttime,jdbcType=VARCHAR},
+      </if>
+      <if test="params.auditor != null" >
+        and auditor = #{params.auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="params.audiDate != null" >
+        and audi_date = #{params.audiDate,jdbcType=VARCHAR},
+      </if>
+      <if test="params.opinion != null" >
+        and opinion = #{params.opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="params.rsts != null" >
+        and rsts = #{params.rsts,jdbcType=INTEGER},
+      </if>
+      <if test="params.title != null" >
+        and title like ${"'%"+params.title+"%'"},
+      </if>
+      <if test="params.remark != null" >
+        and remark = #{params.remark,jdbcType=VARCHAR},
+      </if>
+      
+  	</trim>
+  </select>
+  
+  <select id="count" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+  	select count(*) from tb_info where 1=1 
+  	  	<trim prefix="" suffix="" prefixOverrides="" suffixOverrides=",">
+  	<if test="params.typeId != null" >
+        and type_id = #{params.typeId,jdbcType=INTEGER},
+      </if>
+      <if test="params.seq != null" >
+        and seq = #{params.seq,jdbcType=INTEGER},
+      </if>
+      <if test="params.userId != null" >
+        and user_id = #{params.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="params.crttime != null" >
+        and crttime = #{params.crttime,jdbcType=VARCHAR},
+      </if>
+      <if test="params.auditor != null" >
+        and auditor = #{params.auditor,jdbcType=VARCHAR},
+      </if>
+      <if test="params.audiDate != null" >
+        and audi_date = #{params.audiDate,jdbcType=VARCHAR},
+      </if>
+      <if test="params.opinion != null" >
+        and opinion = #{params.opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="params.rsts != null" >
+        and rsts = #{params.rsts,jdbcType=INTEGER},
+      </if>
+      <if test="params.title != null" >
+        and title like ${"'%"+params.title+"%'"},
+      </if>
+      <if test="params.remark != null" >
+        and remark = #{params.remark,jdbcType=VARCHAR},
+      </if>
+      
+  	</trim>
+  </select>
+  
+</mapper>

@@ -1,0 +1,184 @@
+package com.wap.order.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSONObject;
+import com.hontek.comm.base.BaseController;
+import com.hontek.comm.model.Grid;
+import com.hontek.comm.util.DateUtil;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.member.model.TbMemberUser;
+import com.hontek.order.domain.TbShoppingcartGroupByShopIdTDO;
+import com.hontek.order.domain.TbShoppingcartTDO;
+import com.hontek.order.model.TbShoppingcart;
+import com.hontek.order.service.ShoppingcartService;
+
+/**
+ * @ClassName: ShoppingcartController
+ * @Description: TODO(购物车控制器类)
+ * @version 1.0
+ */
+@Controller
+@RequestMapping("wap/cart")
+public class WapShoppingcartController extends BaseController{
+
+	
+	private ShoppingcartService shoppingcartService;
+	
+	@Autowired
+	public void setShoppingcartService(ShoppingcartService shoppingcartService) {
+		this.shoppingcartService = shoppingcartService;
+	}
+
+	/**
+	 * 分页查询
+	 * @param shoppingcart
+	 * @param page
+	 * @param rows
+	 * @param response
+	 */
+	@RequestMapping("page")
+	public void findPagerList(HttpServletResponse response,SearchPageUtil page){
+		Grid dataGrid = shoppingcartService.findShoppingcartList2(page);
+		writeJson2View(dataGrid, response);
+	}
+	
+	@RequestMapping("find")
+	public void findByMemberId(HttpServletResponse response,SearchPageUtil page,HttpSession session){
+		TbMemberUser tbMember = (TbMemberUser)session.getAttribute("memberUser");
+		page.getParams().put("memberId", tbMember.getMemberId());
+		Grid dataGrid = shoppingcartService.findShoppingcartList2(page);
+		writeJson2View(dataGrid, response);
+	}
+	
+
+
+	/**
+	 * 添加
+	 * @param shoppingcart(必须包含3个参数：goodsId，modelId，goodsCount)
+	 * @param response
+	 */
+	@RequestMapping("add")
+	public void addShoppingcart(TbShoppingcart shoppingcart,HttpServletResponse response,HttpSession session){
+		TbMemberUser tbMember = (TbMemberUser)session.getAttribute("memberUser");
+		shoppingcart.setMemberId(tbMember.getMemberId());
+		shoppingcart.setPutTime(DateUtil.formatDateTime());
+		writeJson2View(shoppingcartService.addShoppingcart(shoppingcart), response);
+	}
+	
+	/**
+	 * 修改
+	 * @param shoppingcart
+	 * @param response
+	 */
+	@RequestMapping("update")
+	public void updateShoppingcart(TbShoppingcart shoppingcart,HttpServletResponse response){
+		writeJson2View(shoppingcartService.updateShoppingcart(shoppingcart), response);
+	}
+	
+	/**
+	 * 修改（购物车）商品数量
+	 * @param shoppingcart:必需参数( goodsCount,cartId,goodsId)
+	 * @param response
+	 */
+	@RequestMapping("updateCount")
+	public void updateGoodsCount(TbShoppingcart shoppingcart){
+		shoppingcartService.updateGoodsCount(shoppingcart);
+	}
+	
+	/**
+	 * 删除
+	 * @param ids
+	 * @param response
+	 */
+	@RequestMapping("delete")
+	public void deleteShoppingcart(String ids,HttpServletResponse response){
+		writeJson2View(shoppingcartService.deleteShoppingcart(ids), response);
+	}
+	
+	/**
+	 * 删除
+	 * @param ids
+	 * @param response
+	 */
+	@RequestMapping("removeShop")
+	public void removeShop(String shopId,HttpServletResponse response,HttpSession session){
+		TbMemberUser tbMember = (TbMemberUser)session.getAttribute("memberUser");
+		int memberId = tbMember.getMemberId();
+		writeJson2View(shoppingcartService.deleteShoppingcart2(shopId,memberId), response);
+	}
+	
+	/**
+	 * 进入购物车页面
+	 * @param modelAndView
+	 * @param tbShoppingcartTDO
+	 * @return
+	 */
+	@RequestMapping("list")
+	public ModelAndView list(ModelAndView modelAndView ,TbShoppingcartTDO tbShoppingcartTDO,HttpSession session){
+		TbMemberUser tbMember = (TbMemberUser)session.getAttribute("memberUser");
+		tbShoppingcartTDO.setMemberId(tbMember.getMemberId());
+		List<TbShoppingcartGroupByShopIdTDO> list = shoppingcartService.findShoppingcartList(tbShoppingcartTDO);
+		System.out.println("=============================================");
+		System.out.println(JSONObject.toJSONString(list));
+		System.out.println("=============================================");
+		modelAndView.addObject("list",list);
+		modelAndView.setViewName("/wap/shopcart");
+		return modelAndView ;
+	}
+	
+	
+	@RequestMapping("listByCartIds")
+	public void findShoppingcartListByIds(String ids,HttpServletResponse response,HttpSession session){				
+		String [] idsArray = ids.split(",");
+		List<Integer> integers = new ArrayList<Integer>();
+		for (String id : idsArray) {
+			integers.add(Integer.valueOf(id));
+		}		
+		List<TbShoppingcartTDO> list = shoppingcartService.findShoppingcartListByIds(integers);
+		System.out.println("=============================================");
+		System.out.println(JSONObject.toJSONString(list));
+		System.out.println("=============================================");
+		writeJson2View(list, response);
+	}
+	
+	/**
+	 * 跳转结算页面
+	 * @param modelAndView
+	 * @param listStr
+	 * @return
+	 */
+	@RequestMapping("toPay")
+	public ModelAndView toPay(ModelAndView modelAndView ,String listStr){
+		List<TbShoppingcart> list = JSONObject.parseArray(listStr, TbShoppingcart.class);
+		List<Integer> cartIds = new ArrayList<Integer>();
+		try {
+			for(TbShoppingcart tbShoppingcart : list){
+				shoppingcartService.updateGoodsCount(tbShoppingcart);
+				cartIds.add(tbShoppingcart.getCartId());
+			}
+			
+			List<TbShoppingcartGroupByShopIdTDO> shoppingcartList = shoppingcartService.findShoppingcartList(cartIds);
+			modelAndView.addObject("list",shoppingcartList);
+			modelAndView.setViewName("buy/custom/confirmOrder");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			modelAndView.setViewName("");
+		}
+		
+		
+		return modelAndView ;
+	}
+	
+}

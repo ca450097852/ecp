@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.RespondDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbRespond" >
+    <id column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="eval_id" property="evalId" jdbcType="INTEGER" />
+    <result column="eval_content" property="evalContent" jdbcType="VARCHAR" />
+    <result column="eval_time" property="evalTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    res_id, eval_id, eval_content, eval_time, member_id
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_respond
+    where res_id = #{resId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbRespond" >
+    insert into tb_respond (res_id, eval_id, eval_content, 
+      eval_time, member_id)
+    values (#{resId,jdbcType=INTEGER}, #{evalId,jdbcType=INTEGER}, #{evalContent,jdbcType=VARCHAR}, 
+      #{evalTime,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER})
+  </insert>
+  <update id="update" parameterType="com.hontek.order.model.TbRespond" >
+    update tb_respond
+    set eval_id = #{evalId,jdbcType=INTEGER},
+      eval_content = #{evalContent,jdbcType=VARCHAR},
+      eval_time = #{evalTime,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=INTEGER}
+    where res_id = #{resId,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getCommon" >
+    from tb_respond where 1 = 1 
+    <if test="params != null and params.memberId != null" >
+    and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+  
+  
+</mapper>

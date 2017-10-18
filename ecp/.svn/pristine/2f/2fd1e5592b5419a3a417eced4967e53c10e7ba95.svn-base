@@ -1,0 +1,28 @@
+ul {list-style-type: none; margin: 0; padding: 0;}
+.main_top_ul li {
+    background:url("../../../static/images/goods/plcza.jpg") no-repeat;
+    float: left;
+    height: 24px;
+    line-height: 24px;
+    margin-right: 7px;
+    text-align: center;
+    width: 76px;
+}
+
+.main_top_ul li a {
+    color: white;
+}
+.main_top_ul li {
+    cursor: pointer;
+    text-align: center;
+}
+body {
+    font-family: "ËÎÌו";
+    font-size: 12px;
+}
+.button_div {
+    bottom: 10px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.ShoppingcartDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbShoppingcart" >
+    <id column="cart_id" property="cartId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+    <result column="put_time" property="putTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="model_id" property="modelId" jdbcType="INTEGER" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cart_id, goods_id, goods_count, put_time, member_id,model_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.hontek.order.model.TbShoppingcartKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_shoppingcart
+    where cart_id = #{cartId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </select>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_shoppingcart
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbShoppingcart" >
+    insert into tb_shoppingcart (cart_id, goods_id, goods_count, 
+      put_time, member_id,model_id)
+    values (#{cartId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{goodsCount,jdbcType=INTEGER}, 
+      #{putTime,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER},#{modelId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hontek.order.model.TbShoppingcart" >
+    insert into tb_shoppingcart
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cartId != null" >
+        cart_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsCount != null" >
+        goods_count,
+      </if>
+      <if test="putTime != null" >
+        put_time,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="modelId != null" >
+        model_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cartId != null" >
+        #{cartId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsCount != null" >
+        #{goodsCount,jdbcType=INTEGER},
+      </if>
+      <if test="putTime != null" >
+        #{putTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="modelId != null" >
+        #{modelId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateGoodsCount" parameterType="com.hontek.order.model.TbShoppingcart" >
+    update tb_shoppingcart
+    <set >
+      <if test="goodsCount != null" >
+        goods_count = #{goodsCount,jdbcType=INTEGER},
+      </if>
+      <if test="putTime != null" >
+        put_time = #{putTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cart_id = #{cartId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="com.hontek.order.model.TbShoppingcart" >
+    update tb_shoppingcart
+    set goods_count = #{goodsCount,jdbcType=INTEGER},
+      put_time = #{putTime,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=INTEGER}
+    where cart_id = #{cartId,jdbcType=INTEGER}
+      and goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getCommon" >
+    from tb_shoppingcart where 1 = 1 
+    <if test="params != null and params.memberId != null" >
+    and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.goodsId != null" >
+    and goods_id = #{params.goodsId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" /> 
+		<if test="params != null and params.modelId != null" >
+		    and model_id = #{params.modelId,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+  
+  <!-- 结果集（包含goods） -->
+  <resultMap id="BaseResultMap2" type="com.hontek.order.model.TbShoppingcart" >
+    <id column="cart_id" property="cartId" jdbcType="INTEGER" />
+    <id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+    <result column="put_time" property="putTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="model_id" property="modelId" jdbcType="INTEGER" />
+    
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+	<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="saled_price" property="saledPrice" jdbcType="INTEGER" />
+    <result column="inventory" property="inventory" jdbcType="INTEGER" />
+    <result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <sql id="getCommon2" >
+    from tb_shoppingcart c,tb_goods g where 1 = 1 and c.goods_id = g.goods_id 
+    <if test="params != null and params.memberId != null" >
+    and c.member_id = #{params.memberId,jdbcType=INTEGER} 
+    </if>
+    <if test="params != null and params.goodsIds != null and params.goodsIds != ''" >
+    and c.goods_id in( ${params.goodsIds} ) 
+    </if>
+  	</sql>
+  
+    <!--  查询列表2 -->
+	<select id="findPageList2" resultMap="BaseResultMap2" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  c.cart_id, c.goods_id, c.goods_count, c.put_time, c.member_id, 
+		g.goods_name, g.shop_id, g.saled_price, g.inventory, g.goods_img
+		<include refid="getCommon2" />
+		
+	</select>
+	
+	<delete id="deleteByShop" parameterType="com.hontek.comm.util.SearchPageUtil" >
+    		delete from tb_shoppingcart where 1 = 1 
+    	    <if test="params.memberId!=null"> and member_id=#{params.memberId} </if>
+        	<if test="params.shopId!=null"> and goods_id in(select goods_id from tb_goods where shop_id=#{params.shopId}) </if>
+    
+  </delete>
+	
+	
+	<select id="getCount2" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon2" />
+	</select>
+	
+	<resultMap type="com.hontek.order.domain.TbShoppingcartTDO" id="BaseResultMap3" extends="BaseResultMap">
+		<association property="tbGoods" column="goods_id" javaType="com.hontek.goods.model.TbGoods" resultMap="goodResult">
+		</association >
+		
+		<association property="tbGoodsModel" column="model_id" javaType="com.hontek.goods.model.TbGoodsModel" resultMap="com.hontek.goods.dao.GoodsModelDao.BaseResultMap">
+		</association >
+	</resultMap>
+	<resultMap type="com.hontek.goods.model.TbGoods" id="goodResult">
+			<id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+			<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+			<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+			<result column="type_id" property="typeId" jdbcType="INTEGER" />
+			<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+			<result column="model_id" property="modelId" jdbcType="INTEGER" />
+			<result column="good_seq" property="goodSeq" jdbcType="INTEGER" />
+			<result column="chengben_price" property="chengbenPrice" jdbcType="INTEGER" />
+			<result column="market_price" property="marketPrice" jdbcType="INTEGER" />
+			<result column="saled_price" property="saledPrice" jdbcType="INTEGER" />
+			<result column="saled_num" property="saledNum" jdbcType="INTEGER" />
+			<result column="inventory" property="inventory" jdbcType="INTEGER" />
+			<result column="goods_no" property="goodsNo" jdbcType="VARCHAR" />
+			<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+			<result column="dimenno" property="dimenno" jdbcType="VARCHAR" />
+			<result column="dimenno_img" property="dimennoImg" jdbcType="VARCHAR" />
+			<result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+			<result column="goods_specs" property="goodsSpecs" jdbcType="VARCHAR" />
+			<result column="goods_desc" property="goodsDesc" jdbcType="VARCHAR" />
+			<result column="net_weight" property="netWeight" jdbcType="VARCHAR" />
+			<result column="rough_weight" property="roughWeight" jdbcType="VARCHAR" />
+			<result column="goods_addr" property="goodsAddr" jdbcType="VARCHAR" />
+			<result column="source_area" property="sourceArea" jdbcType="VARCHAR" />
+			<result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+			<result column="source_tel" property="sourceTel" jdbcType="VARCHAR" />
+			<result column="source_addr" property="sourceAddr" jdbcType="VARCHAR" />
+			<result column="storage_conditions" property="storageConditions" jdbcType="VARCHAR" />
+			<result column="shelf_life" property="shelfLife" jdbcType="VARCHAR" />
+			<result column="state" property="state" jdbcType="VARCHAR" />
+			<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+			<result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+			<result column="member_id" property="memberId" jdbcType="INTEGER" />
+			<result column="remark" property="remark" jdbcType="VARCHAR" />
+			<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="findShoppingcartList" resultMap="BaseResultMap3" parameterType="com.hontek.order.domain.TbShoppingcartTDO">
+		select  ts.cart_id, ts.goods_id, ts.goods_count, ts.put_time, ts.member_id,ts.model_id, tg.*, tgm.model_no , tgm.model_name ,tgm.model_img ,tgm.state,tgm.model_price,tgm.model_count
+		from tb_shoppingcart ts left join tb_goods tg on ts.goods_id=tg.goods_id left join tb_goods_model tgm on ts.model_id = tgm.model_id where 1 = 1 
+		<if test="cartId != null" >
+	    and ts.cart_id = #{cartId,jdbcType=INTEGER}
+	    </if>
+	    <if test="memberId != null" >
+	    and ts.member_id = #{memberId,jdbcType=INTEGER}
+	    </if>
+	</select>
+	
+	<select id="findShoppingcartListByIds" resultMap="BaseResultMap3" parameterType="java.util.List">
+		select  ts.cart_id, ts.goods_id, ts.goods_count, ts.put_time, ts.member_id, ts.model_id,tg.* , tgm.model_no , tgm.model_name ,tgm.model_img ,tgm.state,tgm.model_price,tgm.model_count
+		from tb_shoppingcart ts left join tb_goods tg on ts.goods_id=tg.goods_id left join tb_goods_model tgm on ts.model_id = tgm.model_id where 1 = 1 
+		and ts.cart_id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach>  
+		
+	</select>	
+	
+	
+  
+</mapper>

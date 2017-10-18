@@ -1,0 +1,56 @@
+@charset "utf-8";body{margin:0;font-size:14px;font-family:"微软雅黑","宋体",Arial;}
+a{cursor:pointer;text-decoration:none;}
+div{word-break:break-all;}
+img{border:none;}
+form,ul,li{margin:0;padding:0;}
+ul,li{list-style:none;}
+textarea{font-size:14px;}
+table{width:100%;border:0;border-collapse:collapse;border-spacing:0;}
+td{padding:0;}
+	
+.clear{clear:both;}
+.space{height:7px;}
+.not_found{padding:30px 0;text-align:center;}
+
+
+
+#right{/*float:right;*/width:1000px;min-height:360px;_height:360px;background:url(../../../images/web/comm/goods/right_bg.jpg) no-repeat right top;padding:0 44px 20px 115px;}
+
+
+.here{height:48px;line-height:48px;border-bottom:1px dotted #c5c5c5;color:#848484;}
+.here a{color:#848484;}
+
+	
+	
+#info .main{text-align:center;padding:30px 0;}
+#info .main div{padding:10px 0;font-size:14px;font-weight:bold;}
+#info .main a{color:#2874C2;}
+#info .main a:hover{text-decoration:underline;}
+
+#goo_info{margin:0 0 10px 0;padding:0 0 20px 0;border-bottom:1px dotted #cecece;}
+#goo_info .img{float:left;width:340px;padding:20px 0 0 0;}
+#goo_info .img table{width:300px;height:300px;border:0;margin:0 auto;text-align:center;}
+#goo_info .img .main_img{max-width:300px;max-height:300px;_width:300px;_height:300px;}
+/*放大镜 start*/
+.clearfix:after{clear:both;content:".";display:block;font-size:0;height:0;line-height:0;visibility:hidden;}
+.clearfix{display:block;zoom:1}
+ul#thumblist{display:block;}
+ul#thumblist li{float:left;margin-right:4px;list-style:none;}
+ul#thumblist li a{display:block;border:1px solid #CCC;}
+ul#thumblist li a.zoomThumbActive{border:1px solid red;}
+ul#thumblist li a img{width:50px;height:50px;}
+.jqzoom{text-decoration:none;float:left;}
+/*放大镜 end*/
+#goo_info .info{float:right;width:310px;padding:20px 0 0 0;}
+#goo_info .info table{width:100%;border:0;}
+#goo_info .info td{padding:2px 0;color:#333;}
+#goo_info .info td a{color:#3665A2;}
+#goo_info .info .orange{color:#000;font-weight:bold;font-size:14px;}
+
+
+.texts{padding:20px 0;min-height:300px;_height:300px;}
+.texts .head{height:38px; border-bottom:1px solid #e1e1e1;}
+.texts .head .tag{display:block;float:left;height:36px;padding:0 20px;margin:0 2px 0 0;line-height:36px;}
+.texts .main{line-height:200%;padding:10px 0 0 0;}
+.texts .main .goo_text{display:none;}
+

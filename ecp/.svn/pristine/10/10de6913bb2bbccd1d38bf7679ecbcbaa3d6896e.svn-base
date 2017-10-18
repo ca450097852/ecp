@@ -1,0 +1,20 @@
+package com.hontek.order.dao;
+
+
+import com.hontek.comm.dao.BaseDao;
+import com.hontek.comm.util.SearchMapUtil;
+import com.hontek.order.model.Logis;
+/**
+ * @ClassName: LogisDao
+ * @Description: TODO(订单物流信息，Dao接口类)
+ * @date 2017-9-25 
+ * @author ca
+ * @version 1.0
+ */
+public interface TbLogisDao extends BaseDao<Logis>{
+
+	public Logis findTbLogisByParam(SearchMapUtil map);
+	
+	public Logis findTbLogisById(Integer logisId);
+	
+}

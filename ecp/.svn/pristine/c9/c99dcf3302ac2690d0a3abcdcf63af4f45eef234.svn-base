@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>订单详情2</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+<link rel="stylesheet" href="lib/weui.min.css"/>
+<link rel="stylesheet" href="css/jquery-weui.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="css/jquery-ui.css"/>
+<link rel="stylesheet" href="css/jquery-ui.theme.min.css"/>
+
+  <style>
+  #rgPriceSlider {
+    float: left;
+    clear: left;
+    width: 90%;
+    margin: 15px;
+  }
+
+  #rgPriceSlider .ui-slider-range { background: #04BE02; }
+  #rgPriceSlider .ui-slider-handle { border-color: #04BE02; }
+	.ui-slider .ui-slider-handle{ height: 1.5em;}
+	.sell-price{ border: 1px solid #E1E1E1; padding: 5px; text-align: center; width: 90px; padding: 4px 4px; margin-left: 6px; color: #e21323;}
+	.price-range{ font-size: 14px; position: absolute; top:25px; width: 100%;}
+	.price-range ul li{ position: absolute;}
+	.price-range .price-range-l{ left: 0;}
+	.price-range .price-range-r{ right: 0;}
+  </style>
+
+</head>
+<body ontouchstart>
+<!--主体-->
+<header class="wy-header">
+  <div class="wy-header-icon-back"><span></span></div>
+  <div class="wy-header-title">商品转卖</div>
+</header>
+<div class="weui-content">
+
+  <div class="wy-media-box weui-media-box_text">
+    <div class="weui-media-box__bd">
+     <div class="weui-media-box_appmsg ord-pro-list">
+        <div class="weui-media-box__hd"><a href="pro_info.html"><img class="weui-media-box__thumb" src="upload/pro3.jpg" alt=""></a></div>
+        <div class="weui-media-box__bd">
+          <h1 class="weui-media-box__desc"><a href="pro_info.html" class="ord-pro-link">蓝之蓝蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食酒2瓶装包邮</a></h1>
+          <p class="weui-media-box__desc">规格：<span>红色</span>，<span>23</span></p>
+          <div class="clear mg-t-10">
+            <div class="wy-pro-pri fl">¥<em class="num font-15">296.00</em></div>
+            <div class="pro-amount fr"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="weui-panel">
+    <div class="weui-panel__bd">
+      <div class="weui-media-box weui-media-box_small-appmsg">
+        <div class="weui-cells">
+        	
+                
+          <div class="weui-cell weui-cell_access" href="javascript:;" >
+            <div class="weui-cell__bd weui-cell_primary">
+              <p class="font-14">
+              	<span class="mg-r-10">我能赚</span> <em class="num font-15 txt-color-red">¥ 296.00</em>
+              	<span class="fr">销售价<input class="sell-price" type="text" id="rgPrice" style="border: 1 !important;" type="number" pattern="[0-9]*"/></span></p>
+            </div>
+          </div>
+          
+          <div class="weui-cell weui-cell_access" style="padding-bottom: 27px;">
+            <div class="weui-cell__bd weui-cell_primary">
+              	<div id="rgPriceSlider">
+              		
+              		<div class="price-range">
+              			<ul>
+              				<li class="price-range-l">¥<em>82</em></li>
+              				<li class="price-range-r">¥<em>150</em></li>
+              			</ul>
+              		</div>
+              	</div>
+            
+            </div>
+          </div>
+          
+          
+        	<div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd weui-cell_primary">
+              <p class="font-14">             	          	
+              	<textarea type="text" placeholder="写给买家的推荐理由..." id="buy_remark" style="width: 100%;" rows="5"></textarea>
+              </p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wy-media-box weui-media-box_text">
+    
+    <div class="mg10-0"><a href="shopcart.html" class="weui-btn weui-btn_primary">创建并转发</a></div>
+  </div>
+</div>
+<script src="lib/jquery.js"></script> 
+<script src="lib/fastclick.js"></script> 
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+$(function(){
+	
+	$("#rgPriceSlider" ).slider({
+     orientation: "horizontal",
+      range: "min",
+      max: 255,
+      value: 127,
+      slide: refreshSwatch,
+      change: refreshSwatch
+  });
+		
+});
+
+  function refreshSwatch() {
+    var rgPriceSlider = $( "#rgPriceSlider" ).slider( "value" );
+    $("#rgPrice").val(rgPriceSlider);
+  }
+</script>
+
+
+</body>
+</html>

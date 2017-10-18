@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.sys.dao.LogDao">
+
+  <resultMap id="BaseResultMap" type="com.hontek.sys.model.TsLog" >
+    <id column="log_id" property="logId" jdbcType="INTEGER" />
+    <result column="col_id" property="colId" jdbcType="INTEGER" />
+    <result column="func_name" property="funcName" jdbcType="VARCHAR" />
+    <result column="act_type" property="actType" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="ent_id" property="entId" jdbcType="INTEGER" />
+    <result column="log_time" property="logTime" jdbcType="VARCHAR" />
+    <result column="computer_ip" property="computerIp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    log_id, col_id, func_name, act_type, user_name, user_id, ent_id, log_time as logTime, computer_ip
+  </sql>
+	
+	<delete id="delete" parameterType="java.lang.String" >
+    delete from ts_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.hontek.sys.model.TsLog" >
+    insert into ts_log (log_id, col_id, func_name, 
+      act_type, user_name, user_id, 
+      ent_id, log_time, computer_ip
+      )
+    values (#{logId,jdbcType=INTEGER}, #{colId,jdbcType=INTEGER}, #{funcName,jdbcType=VARCHAR}, 
+      #{actType,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{entId,jdbcType=INTEGER}, #{logTime,jdbcType=VARCHAR}, #{computerIp,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  	<sql id="getCommon" >
+    	from ts_log where 1 = 1 
+    <if test="params != null and params.entId != null" >
+    	and ent_id = #{params.entId,jdbcType=INTEGER}
+    </if>
+     <if test="params != null and params.userName != null and params.userName != ''" >
+    	and  INSTR(user_name,#{params.userName,jdbcType=VARCHAR})>0 
+    </if>
+    <if test="params != null and params.computerIp != null and params.computerIp != ''" >
+    	and  INSTR(computer_ip,#{params.computerIp,jdbcType=VARCHAR})>0 
+    </if>
+    <if test="params != null and params.startTime != null and params.startTime != ''" >
+    	and log_time > #{params.startTime,jdbcType=VARCHAR} 
+    </if>
+     <if test="params != null and params.endTime != null and params.endTime != ''" >
+    	and #{params.endTime,jdbcType=VARCHAR} >  log_time 
+    </if>
+  	</sql>
+  
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+	
+  
+	<!--  查询单条记录  -->
+	<select id="findList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select log_id,col_id,func_name,act_type,user_name,user_id,ent_id,log_time,computer_ip from  ts_log
+		where 1=1 <if test="params.userName !=null"> and user_name like '%${params.userName}%' </if>
+		
+	</select>
+	
+
+</mapper>

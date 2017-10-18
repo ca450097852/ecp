@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.OrderDetailDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbOrderDetail" >
+    <id column="order_detail_id" property="orderDetailId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+    <result column="goods_price" property="goodsPrice" jdbcType="REAL" />
+    <result column="evaluate_state" property="evaluateState" jdbcType="VARCHAR" />
+    <result column="recommend" property="recommend" jdbcType="VARCHAR" />
+    
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="type_id" property="typeId" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="model_id" property="modelId" jdbcType="INTEGER" />
+		<result column="good_seq" property="goodSeq" jdbcType="INTEGER" />
+		<result column="chengben_price" property="chengbenPrice" jdbcType="INTEGER" />
+		<result column="market_price" property="marketPrice" jdbcType="INTEGER" />
+		<result column="saled_price" property="saledPrice" jdbcType="INTEGER" />
+		<result column="saled_num" property="saledNum" jdbcType="INTEGER" />
+		<result column="inventory" property="inventory" jdbcType="INTEGER" />
+		<result column="goods_no" property="goodsNo" jdbcType="VARCHAR" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="dimenno" property="dimenno" jdbcType="VARCHAR" />
+		<result column="dimenno_img" property="dimennoImg" jdbcType="VARCHAR" />
+		<result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+		<result column="goods_specs" property="goodsSpecs" jdbcType="VARCHAR" />
+		<result column="goods_desc" property="goodsDesc" jdbcType="VARCHAR" />
+		<result column="net_weight" property="netWeight" jdbcType="VARCHAR" />
+		<result column="rough_weight" property="roughWeight" jdbcType="VARCHAR" />
+		<result column="goods_addr" property="goodsAddr" jdbcType="VARCHAR" />
+		<result column="source_area" property="sourceArea" jdbcType="VARCHAR" />
+		<result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+		<result column="source_tel" property="sourceTel" jdbcType="VARCHAR" />
+		<result column="source_addr" property="sourceAddr" jdbcType="VARCHAR" />
+		<result column="storage_conditions" property="storageConditions" jdbcType="VARCHAR" />
+		<result column="shelf_life" property="shelfLife" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="model_name" property="modelName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_detail_id, order_id, goods_id,model_id, goods_count, goods_price ,evaluate_state,recommend
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_order_detail
+    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbOrderDetail" >
+    insert into tb_order_detail (order_detail_id, order_id, goods_id, model_id,
+      goods_count, goods_price ,evaluate_state,recommend)
+    values (#{orderDetailId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{modelId,jdbcType=INTEGER}, #{goodsCount,jdbcType=INTEGER},#{goodsPrice,jdbcType=REAL},#{evaluateState,jdbcType=VARCHAR},#{recommend,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.order.model.TbOrderDetail" >
+    update tb_order_detail
+    set 
+    <if test=" orderId !=null ">
+    	order_id = #{orderId,jdbcType=INTEGER},
+    </if>
+    <if test=" goodsId !=null ">
+    	goods_id = #{goodsId,jdbcType=INTEGER},
+    </if>
+    <if test=" modelId !=null">
+    	model_id = #{modelId,jdbcType=INTEGER},
+    </if>
+    <if test=" goodsCount !=null">
+    	goods_count = #{goodsCount,jdbcType=INTEGER},
+    </if>
+    <if test=" goodsPrice !=null ">
+    	goods_price = #{goodsPrice,jdbcType=REAL},
+    </if>
+    <if test=" evaluateState !=null ">
+    	evaluate_state = #{evaluateState,jdbcType=VARCHAR}
+    </if>
+    <if test=" recommend !=null ">
+    	recommend = #{recommend,jdbcType=VARCHAR}
+    </if>
+    where order_detail_id = #{orderDetailId,jdbcType=INTEGER}
+  </update>
+  
+	
+	<sql id="getCommon" >
+    from tb_order_detail where 1 = 1 
+    <if test="params != null and params.orderId != null" >
+    and order_id = #{params.orderId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.recommend != null" >
+    and recommend = #{params.recommend,jdbcType=INTEGER}
+    </if>
+  </sql>
+  
+  	<select id="findObjectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select  
+		<include refid="Base_Column_List" />
+		from tb_order_detail where order_detail_id = #{id,jdbcType=INTEGER}
+	</select>
+	
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	<select id="findPageListWithParam" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select tod.* , tg.* from tb_order_detail tod left join tb_goods tg on tod.goods_id = tg.goods_id
+		left join tb_goods_model tgm on tod.model_id = tgm.model_id
+		where 1=1  
+		<if test="params != null and params.orderId != null and params.orderId !=''" >
+	    and tod.order_id = #{params.orderId,jdbcType=INTEGER}
+	    </if>
+	</select>
+	
+	<select id="findListWithParam" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select tod.* , tg.* ,tgm.model_name from tb_order_detail tod left join tb_goods tg on tod.goods_id = tg.goods_id
+		left join tb_goods_model tgm on tod.model_id = tgm.model_id
+		where 1=1  
+		<if test="orderId != null" >
+	    and tod.order_id = #{orderId,jdbcType=INTEGER}
+	    </if>
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+	
+	
+  
+</mapper>

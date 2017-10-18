@@ -1,0 +1,137 @@
+package com.hontek.order.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hontek.comm.model.Grid;
+import com.hontek.comm.util.SearchMapUtil;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.order.dao.TbLogisDao;
+import com.hontek.order.model.Logis;
+import com.hontek.sys.service.SequenceService;
+/**
+ * @ClassName: LogisServiceImpl
+ * @Description: TODO(发货物流信息表  ServiceImpl)
+ * @date 2017-9-25 
+ * @author ca
+ * @version 1.0
+ */
+@Service("tbLogisService")
+public class TbLogisServiceImpl implements TbLogisService {
+
+	@Autowired
+	private TbLogisDao logisDao;
+	
+	@Autowired
+	private SequenceService sequenceService;
+	
+	Logger logger = Logger.getLogger(this.getClass());
+	
+	/**
+	 * 分页查询
+	 */
+	public Grid findLogisList(SearchPageUtil page) {
+		
+		
+		int tatol = logisDao.getCount(page.getParams());
+
+
+		List<Logis> list = logisDao.findPageList(page);
+						
+		Grid dataGrid = new Grid(tatol, list);
+		
+		return dataGrid;
+	}
+	
+	@Override
+	public Logis findTbLogisByParam(SearchMapUtil map) {
+		// TODO Auto-generated method stub
+		return logisDao.findTbLogisByParam(map);
+	}
+	@Override
+	public Logis findTbLogisById(Integer logisId) {
+		// TODO Auto-generated method stub
+		return logisDao.findTbLogisById(logisId);
+	}
+
+
+
+	public String addLogis(Logis logis) {
+		String message = "添加发货物流信息成功!";
+		try {
+			logis.setLogisId(sequenceService.getSequence("tb_logis"));
+			logisDao.add(logis);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "添加发货物流信息失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+
+	public String deleteLogis(String ids) {
+		int count = 0;
+		String message = "删除发货物流信息成功!";
+		try {
+			if(ids!=null&&!"".equals(ids)){
+				String [] idArray = ids.split(",");
+				for (int i = 0; i < idArray.length; i++) {
+					String id = idArray[i];
+					if(id!=null){
+						logisDao.delete(id);
+						count++;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "删除发货物流信息失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+
+
+
+	public String updateLogis(Logis logis) {
+		String message = "修改发货物流信息成功!";
+		try {
+			logisDao.update(logis);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "修改发货物流信息失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+	
+	public String modifyLogis(Logis logis) {
+		String message = "1";
+		try {
+			logisDao.update(logis);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "修改发货物流信息失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+
+	@Override
+	public Logis findByOrderId(String orderId) {
+		// TODO Auto-generated method stub
+		SearchMapUtil sMapUtil = new SearchMapUtil();
+		Map<String,Object> logisParams= new HashMap<>();
+		logisParams.put("orderId", orderId);	
+
+		sMapUtil.setParams(logisParams);
+		Logis logis = findTbLogisByParam(sMapUtil);
+		return logis;
+	}
+	
+}

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.EvaluateDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbEvaluate" >
+    <id column="eval_id" property="evalId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_detail_id" property="orderDetailId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="eval_way" property="evalWay" jdbcType="INTEGER" />
+    <result column="eval_side" property="evalSide" jdbcType="INTEGER" />
+    <result column="hadimg" property="hadimg" jdbcType="INTEGER" />
+    <result column="eval_type" property="evalType" jdbcType="INTEGER" />
+    <result column="eval_content" property="evalContent" jdbcType="VARCHAR" />
+    <result column="eval_time" property="evalTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="nickname" property="memberIdBuyName" jdbcType="VARCHAR" />
+    <result column="approve_num" property="approveNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    eval_id, order_id, order_detail_id ,goods_id, eval_way, eval_side, hadimg, eval_type, eval_content, 
+    eval_time, member_id, approve_num
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_evaluate
+    where eval_id = #{evalId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbEvaluate" >
+    insert into tb_evaluate (eval_id, order_id,order_detail_id, goods_id, 
+      eval_way, eval_side, hadimg, 
+      eval_type, eval_content, eval_time, 
+      member_id, approve_num)
+    values (#{evalId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER},#{orderDetailId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{evalWay,jdbcType=INTEGER}, #{evalSide,jdbcType=INTEGER}, #{hadimg,jdbcType=INTEGER}, 
+      #{evalType,jdbcType=INTEGER}, #{evalContent,jdbcType=VARCHAR}, #{evalTime,jdbcType=VARCHAR}, 
+      #{memberId,jdbcType=INTEGER}, #{approveNum,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.order.model.TbEvaluate" >
+    update tb_evaluate
+    set order_id = #{orderId,jdbcType=INTEGER},
+      order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      eval_way = #{evalWay,jdbcType=INTEGER},
+      eval_side = #{evalSide,jdbcType=INTEGER},
+      hadimg = #{hadimg,jdbcType=INTEGER},
+      eval_type = #{evalType,jdbcType=INTEGER},
+      eval_content = #{evalContent,jdbcType=VARCHAR},
+      eval_time = #{evalTime,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=INTEGER},
+      approve_num = #{approveNum,jdbcType=INTEGER}
+    where eval_id = #{evalId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <sql id="getCommon" >
+    from tb_evaluate where 1 = 1 
+    <if test="params != null and params.orderId != null" >
+    and order_id = #{params.orderId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+		<if test="params != null and params.evalSide != null">
+		and eval_side = #{params.evalSide,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.memberId != null">
+		and member_id = #{params.memberId,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		from tb_evaluate where 1 = 1 
+	    <if test="params != null and params.orderId != null" >
+	    and order_id = #{params.orderId,jdbcType=INTEGER}
+	    </if>
+		<if test="params != null and params.evalSide != null">
+		and eval_side = #{params.evalSide,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.memberId != null">
+		and member_id = #{params.memberId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.goodsId != null">
+		and goods_id = #{params.goodsId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.hadimg != null">
+		and hadimg = #{params.hadimg,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<resultMap id="ResultMap" extends="BaseResultMap" type="com.hontek.order.domain.EvaluateTDO">
+		<association property="tbOrderDetail" column="order_detail_id" javaType="com.hontek.order.model.TbOrderDetail" resultMap="com.hontek.order.dao.OrderDetailDao.BaseResultMap">
+		</association >
+		<association property="tbRespond" column="eval_id" javaType="com.hontek.order.model.TbRespond" >
+			<id column="res_id" property="resId" jdbcType="INTEGER" />
+		    <result column="eval_id" property="evalId" jdbcType="INTEGER" />
+		    <result column="res_eval_content" property="evalContent" jdbcType="VARCHAR" />
+		    <result column="res_eval_time" property="evalTime" jdbcType="VARCHAR" />
+		    <result column="res_member_id" property="memberId" jdbcType="INTEGER" />
+		</association >
+	</resultMap> 
+	
+	<!-- 门户评价查询列表，包含卖家回复 -->
+ 	<select id="webFindProtalPageList" resultMap="ResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select te.* ,tms.nickname ,tg.goods_img , tg.goods_id ,tgm.model_name ,tr.res_id,tr.eval_content res_eval_content,tr.eval_time res_eval_time ,tr.member_id res_member_id
+		from tb_goods tg
+		left join tb_evaluate te on tg.goods_id = te.goods_id
+		left join tb_member_user tms on te.member_id = tms.member_id 
+		left join tb_respond tr on te.eval_id = tr.eval_id
+		left join tb_order_detail tod on te.order_detail_id = tod.order_detail_id
+		left join tb_goods_model tgm on tod.model_id = tgm.model_id 
+		where 1=1 
+		<if test="params != null and params.goodsId != null">
+		and tg.goods_id = #{params.goodsId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.hadimg != null">
+		and te.hadimg = #{params.hadimg,jdbcType=INTEGER}
+		</if>
+		order by te.eval_time desc
+	</select>
+	
+	<!-- web端查询列表 -->
+ 	<select id="webFindPageList" resultMap="ResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select te.* , tg.goods_name ,tg.goods_img , tg.goods_id ,tgm.model_name from tb_evaluate te
+		left join tb_order_detail tod on te.order_detail_id = tod.order_detail_id
+		left join tb_goods tg on tod.goods_id = tg.goods_id
+		left join tb_goods_model tgm on tod.model_id = tgm.model_id
+		where 1=1 
+		<if test="params != null and params.evalSide != null">
+		and te.eval_side = #{params.evalSide,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.memberId != null">
+		and te.member_id = #{params.memberId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.hadimg != null">
+		and te.hadimg = #{params.hadimg,jdbcType=INTEGER}
+		</if>
+		order by te.eval_time desc
+	</select>
+	
+	<!-- web端查询列表 -->
+ 	<select id="webFindSellerPageList" resultMap="ResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select te.* , tg.goods_name ,tg.goods_img , tg.goods_id ,tgm.model_name from tb_evaluate te
+		left join tb_order_detail tod on te.order_detail_id = tod.order_detail_id
+		left join tb_goods tg on tod.goods_id = tg.goods_id
+		left join tb_goods_model tgm on tod.model_id = tgm.model_id
+		left join tb_shop ts on ts.shop_id = tg.shop_id 
+		where 1=1 
+		<if test="params != null and params.evalSide != null">
+		and te.eval_side = #{params.evalSide,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.memberId != null">
+		and ts.member_id = #{params.memberId,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.hadimg != null">
+		and te.hadimg = #{params.hadimg,jdbcType=INTEGER}
+		</if>
+		<if test="params != null and params.goodsId != null">
+		and te.goods_id  in (${params.goodsId})  
+		</if>
+		order by te.eval_time desc
+	</select>
+	
+	<resultMap id="ResultMap2" type="com.hontek.order.domain.EvaluateCountTDO">
+		<result column="good_evaluate" property="goodEvaluate" jdbcType="VARCHAR" />
+    	<result column="common_evaluate" property="commonEvaluate" jdbcType="VARCHAR" />
+    	<result column="bad_evaluate" property="badEvaluate" jdbcType="VARCHAR" />
+    	<result column="total_evaluate" property="totalEvaluate" jdbcType="VARCHAR" />
+	</resultMap> 
+	<!-- 商品评价统计 -->
+	<select id="getEvaluateCount" resultMap="ResultMap2" parameterType="java.lang.Integer">
+		SELECT
+			SUM(CASE WHEN eval_type=1 THEN 1 ELSE 0 END) as goodEvaluate ,
+			SUM(CASE WHEN eval_type=2 THEN 1 ELSE 0 END) as commonEvaluate ,
+			SUM(CASE WHEN eval_type=3 THEN 1 ELSE 0 END) as badEvaluate ,
+			count(*) as totalEvaluate
+		FROM
+			tb_evaluate te
+		WHERE
+			te.goods_id = #{goodsId,jdbcType=INTEGER}
+	</select>
+	
+  
+</mapper>

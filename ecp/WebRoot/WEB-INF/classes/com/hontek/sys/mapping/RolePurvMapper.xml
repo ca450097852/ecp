@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.sys.dao.RolePurvDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.sys.model.TsRolePurv" >
+    <id column="purv_id" property="purvId" jdbcType="INTEGER" />
+    <result column="ent_id" property="entId" jdbcType="INTEGER" />
+    <result column="col_id" property="colId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="col_name" property="colName" jdbcType="VARCHAR" />
+    <result column="col_url" property="colUrl" jdbcType="VARCHAR" />
+    <result column="col_level" property="colLevel" jdbcType="INTEGER" />
+    <result column="seq" property="seq" jdbcType="INTEGER" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    purv_id, ent_id, col_id, role_id, parent_id, col_name, col_url, col_level, seq, icon_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ts_role_purv
+    where purv_id = #{purvId,jdbcType=INTEGER}
+  </select>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from ts_role_purv
+    where purv_id = #{purvId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.sys.model.TsRolePurv" >
+    insert into ts_role_purv (purv_id, ent_id, col_id, 
+      role_id, parent_id, col_name, 
+      col_url, col_level, seq, 
+      icon_url)
+    values (#{purvId,jdbcType=INTEGER}, #{entId,jdbcType=INTEGER}, #{colId,jdbcType=INTEGER}, 
+      #{roleId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{colName,jdbcType=VARCHAR}, 
+      #{colUrl,jdbcType=VARCHAR}, #{colLevel,jdbcType=INTEGER}, #{seq,jdbcType=INTEGER}, 
+      #{iconUrl,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="com.hontek.sys.model.TsRolePurv" >
+    update ts_role_purv
+    set ent_id = #{entId,jdbcType=INTEGER},
+      col_id = #{colId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      col_name = #{colName,jdbcType=VARCHAR},
+      col_url = #{colUrl,jdbcType=VARCHAR},
+      col_level = #{colLevel,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      icon_url = #{iconUrl,jdbcType=VARCHAR}
+    where purv_id = #{purvId,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getCommon" >
+    	from ts_role_purv where 1 = 1 
+    <if test="params != null and params.parentId != null" >
+    	and parent_id = #{params.parentId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.roleId != null" >
+    	and role_id = #{params.roleId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+  <!-- 默认角色权限 -->
+  <select id="findRolePurvListByRole" parameterType="java.lang.String"  resultType="java.lang.Integer">
+  	select col_id from ts_role_purv where 1 = 1
+  	and role_id in ( #{roleIds,jdbcType=VARCHAR} )
+  </select>
+  
+  <!-- 按角色删除 权限 -->
+  <delete id="deleteByRoleId" parameterType="INTEGER" >
+    delete from ts_role_purv
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  
+</mapper>

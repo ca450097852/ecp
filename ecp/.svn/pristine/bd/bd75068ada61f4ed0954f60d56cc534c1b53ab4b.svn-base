@@ -1,0 +1,318 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.hontek.member.model.TbMemberUser"  %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String filePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<title>商城首页</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+		<link rel="stylesheet" href="lib/weui.min.css">
+		<link rel="stylesheet" href="css/jquery-weui.css">
+		<link rel="stylesheet" href="css/style.css">
+		
+	</head>
+	
+	<body ontouchstart>
+	
+	<input type="hidden" id="basePath" value="<%=basePath%>" />
+	<input type="hidden" id="filePath" value="<%=filePath%>" />
+
+	
+		<!--顶部搜索-->
+		<header class="weui-header fixed-top home-head">
+			<a href="#" class="head-icon head-icon-qr">
+				<img src="images/icon-qr.png">
+			</a>
+			<div class="weui-search-bar" id="searchBar">
+				<form class="weui-search-bar__form">
+					<div class="weui-search-bar__box">
+						<i class="weui-icon-search"></i>
+						<input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索您想要的商品" required>
+						<a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+					</div>
+					<label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+        <i class="weui-icon-search"></i>
+        <span>搜索您想要的商品</span>
+      </label>
+				</form>
+				<a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+			</div>
+			<a href="#" class="head-icon head-icon-news">
+				<img src="images/icon-news.png">
+				<span class="weui-badge" style="position: absolute;top: -.5em;left: 1.6em;">8</span>
+			</a>
+		</header>
+		<!--主体-->
+		<div class="weui-content home-content">
+			<!--顶部轮播-->
+			<div class="swiper-container swiper-banner">
+				<div class="swiper-wrapper" id="adurl">
+					
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+			<!--图标分类-->
+			<div class="weui-flex wy-iconlist-box">
+				<div class="weui-flex__item">
+					<a href="pro_list.html" class="wy-links-iconlist">
+						<div class="img"><img src="images/icon-link1.png"></div>
+						<p>精选推荐</p>
+					</a>
+				</div>
+				<div class="weui-flex__item">
+					<a href="pro_list.html" class="wy-links-iconlist">
+						<div class="img"><img src="images/icon-link2.png"></div>
+						<p>酒水专场</p>
+					</a>
+				</div>
+				<div class="weui-flex__item">
+					<a href="all_orders.html" class="wy-links-iconlist">
+						<div class="img"><img src="images/icon-link3.png"></div>
+						<p>订单管理</p>
+					</a>
+				</div>
+				<div class="weui-flex__item">
+					<a href="Settled_in.html" class="wy-links-iconlist">
+						<div class="img"><img src="images/icon-link4.png"></div>
+						<p>商家入驻</p>
+					</a>
+				</div>
+			</div>
+			<!--新闻切换-->
+			<div class="wy-ind-news">
+				<i class="news-icon-laba"><img src="images/news-title.png"></i>
+				<div class="swiper-container swiper-news">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<a href="news_info.html">热烈祝贺伟义商城成功热烈祝贺伟义商城成功上线热烈祝贺伟义商城成功上线上线</a>
+						</div>
+						<div class="swiper-slide">
+							<a href="news_info.html">蓝之蓝股份成公司上市</a>
+						</div>
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+				<a href="news_list.html" class="newsmore"><i class="news-icon-more"></i></a>
+			</div>
+			<!--精选产品-->
+			<div class="wy-Module">
+				<div class="wy-Module-con">
+					<div class="block-good">
+						<div class="block-title">热卖产品</div>
+						<div class="swiper-container swiper-jingxuan" >
+							<div class="swiper-wrapper" id="remai">
+								
+							</div>
+							<div class="swiper-pagination jingxuan-pagination"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--推荐产品-->
+			<div class="wy-Module">
+				<div class="wy-Module-con">
+					<div class="block-recommend">
+						<div class="block-title">推荐产品</div>
+						<div class="swiper-container swiper-tuijian" >
+							<div class="swiper-wrapper" id="recommend_goods">
+								
+							</div>
+							<div class="swiper-pagination jingxuan-pagination"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--酒水专场-->
+			<div class="wy-Module wy-Module-classify">
+				<div class="wy-Module-tit clear"><span class="wy-Module-tit-01">最新商品</span></div>
+				<div class="wy-Module-con">
+					<ul class="wy-pro-classify clear" id="new_goods">
+						
+					</ul>
+				</div>
+			</div>
+			<!--零食专场-->
+<!-- 			<div class="wy-Module wy-Module-classify"> -->
+<!-- 				<div class="wy-Module-tit clear"><span class="wy-Module-tit-02">饮料酒水</span><a class="wy-Module-more" href="#">更多</a></div> -->
+<!-- 				<div class="wy-Module-con"> -->
+<!-- 					<ul class="wy-pro-classify clear"> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro1.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro2.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro3.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro4.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro5.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro1.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 					</ul> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+			<!--猜你喜欢-->
+<!-- 			<div class="wy-Module "> -->
+<!-- 				<div class="wy-Module-tit-line"><span>猜你喜欢</span></div> -->
+<!-- 				<div class="wy-Module-con"> -->
+<!-- 					<ul class="wy-pro-list clear"> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro1.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro2.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro3.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro4.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro5.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 						<li> -->
+<!-- 							<a href="pro_info.html"> -->
+<!-- 								<div class="proimg"><img src="upload/pro1.jpg"></div> -->
+<!-- 								<div class="protxt"> -->
+<!-- 									<div class="name">洋河蓝色瓶装经典Q7浓香型白酒500ml52度高端纯粮食白酒2瓶装包邮</div> -->
+<!-- 									<div class="wy-pro-pri">¥<span>296.00</span></div> -->
+<!-- 								</div> -->
+<!-- 							</a> -->
+<!-- 						</li> -->
+<!-- 					</ul> -->
+<!-- 					<div class="morelinks"> -->
+<!-- 						<a href="pro_list.html">查看更多 >></a> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+		</div>
+
+		<!--底部导航-->
+		 <!--footer-->
+ 	 <jsp:include page="footer.jsp"></jsp:include>
+  
+		
+
+		<script src="lib/jquery-2.1.4.js"></script>
+		<script src="lib/fastclick.js"></script>
+		<script>
+			$(function() {
+				FastClick.attach(document.body);
+			});
+		</script>
+		<script src="js/jquery-weui.js"></script>
+		<script src="js/swiper.js"></script>
+<script>
+	
+	$(".swiper-news").swiper({
+		loop: true,
+		direction: 'vertical',
+		paginationHide :true,
+        autoplay: 3000
+      });
+	
+    
+	 
+</script>
+		<script>
+			//顶部搜索栏效果
+			$(document).ready(function() {
+				$(window).scroll(function() {
+					var top = 0; //获取指定位置
+					var scrollTop = $(window).scrollTop(); //获取当前滑动位置
+					if(scrollTop > top) { //滑动到该位置时执行代码
+						$(".home-head").addClass("active");
+					} else {
+						$(".home-head").removeClass("active");
+					}
+				});
+			});
+		</script>
+		
+<script src="js/index.js"></script>
+
+	</body>
+
+</html>

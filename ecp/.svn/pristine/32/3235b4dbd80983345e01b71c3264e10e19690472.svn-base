@@ -1,0 +1,135 @@
+package com.hontek.order.model;
+
+
+/**
+ * @ClassName: TbLogis
+ * @Description: TODO(发货物流信息表 )
+ * @date 2017-9-25 
+ * @author ca
+ * @version 1.0
+ */
+public class Logis {
+    private Integer logisId;
+
+    private Integer orderId;
+
+    private String logisWay;
+
+    private String logisName;
+
+    private String logisNo;
+
+    private String leaveWord;
+
+    private String logisTime;
+
+    private String receiveTime;
+
+    private String receiveUser;
+    
+    private String addr;
+    
+    private String mobile;
+    
+    private String recipient;
+
+	public Integer getLogisId() {
+		return logisId;
+	}
+
+	public void setLogisId(Integer logisId) {
+		this.logisId = logisId;
+	}
+
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getLogisWay() {
+		return logisWay;
+	}
+
+	public void setLogisWay(String logisWay) {
+		this.logisWay = logisWay;
+	}
+
+	public String getLogisName() {
+		return logisName;
+	}
+
+	public void setLogisName(String logisName) {
+		this.logisName = logisName;
+	}
+
+	public String getLogisNo() {
+		return logisNo;
+	}
+
+	public void setLogisNo(String logisNo) {
+		this.logisNo = logisNo;
+	}
+
+	public String getLeaveWord() {
+		return leaveWord;
+	}
+
+	public void setLeaveWord(String leaveWord) {
+		this.leaveWord = leaveWord;
+	}
+
+	public String getLogisTime() {
+		return logisTime;
+	}
+
+	public void setLogisTime(String logisTime) {
+		this.logisTime = logisTime;
+	}
+
+	public String getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(String receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
+	public String getReceiveUser() {
+		return receiveUser;
+	}
+
+	public void setReceiveUser(String receiveUser) {
+		this.receiveUser = receiveUser;
+	}
+
+	public String getAddr() {
+		return addr;
+	}
+
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
+    
+    
+    
+  
+}

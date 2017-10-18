@@ -1,0 +1,252 @@
+var path="";
+$(function(){
+	path=$("#path").val();
+	findAddress();
+	
+});
+
+//添加/修改地址		
+function address(){
+	var addrId=$("#addrId").val();
+	var recipient=$("#recipient").val();
+	var mobile=$("#mobile").val();
+	var addr=$("#addr").val();
+	var code=$("#code").val();
+	var btn=$("#btn").val();
+	var addrArea=$("#address").val();
+	var addrDefault="";
+	var URL="";
+	var queryParam ={};
+	 if(btn=="on"){
+		 addrDefault="0";
+	
+	}if(btn=="off"){
+		addrDefault="1";
+	}
+	if(recipient==""){
+		$.alert("请填写收货人");
+		return;
+	}
+	if(recipient.length<2 || recipient.length>15){
+		$.alert("收货人姓名：限制2-15个字符");
+		return 
+	}
+	if(mobile.length==0){
+		$.alert("请填写手机号码");
+		return;
+	}
+	if(mobile.length!=0 &&mobile.length!=11){
+		$.alert("手机号码数为11位！请填写正确的手机号");
+		return;
+	}
+	if(addr==""){
+		$.alert("请填写详细地址");
+		return;
+	}if(addr.length<5 ||addr.length>60){
+		$.alert("详细地址:限制5-60字");
+		return;
+	}
+	if(addrId==""){
+		URL=path+'/wap/memberAddr/add.mobile';
+		 queryParam ={"addrArea":addrArea,"addr":addr,"telephone":mobile,"mobile":mobile,"recipient":recipient,"addrDefault":addrDefault,"postCode":code} ;
+	}
+	else{
+		 URL=path+'/wap/memberAddr/update.mobile';
+		 queryParam ={"addrId":addrId,"addrArea":addrArea,"addr":addr,"telephone":mobile,"mobile":mobile,"recipient":recipient,"addrDefault":addrDefault,"postCode":code} ;	
+	}
+	
+	
+	$.confirm("确认保存地址", function() {
+		$.ajax({
+			url:URL,
+			type:"post",
+			data:queryParam,
+			success:function(data){
+				findAddress();
+				closeFull();
+				$.closePopup();
+				$.toast("地址保存成功！");
+				$("#addBtn").html(' <a href="javascript:;" class="weui-btn weui-btn_primary open-popup" data-target="#full"onclick="addFull();">添加新地址</a>');
+			}
+		});
+		
+		  }, function() {
+		 
+});
+	
+	//修改默认地址
+	if(addrDefault=="0"&&addrId!="null"){
+		
+		$.ajax({
+			   type: "POST",
+			   url: path+"/wap/memberAddr/toDefaultAddr.mobile",
+			   data:{"addrId":addrId} ,
+			   success: function(msg){
+				 
+				   findAddress(addrId);
+			   }
+		});
+	}
+	
+}
+//设置默认地址
+function clickBtn(){
+	 if($("#btn").val()=="off"){
+         $("#btn").val("on");
+     }else{
+         $("#btn").val("off");
+     }
+}
+//查询地址
+function findAddress(){
+	$.ajax({
+		   type: "POST",
+		   url:path+"/wap/memberAddr/list.mobile",
+		   dataType:"json" ,
+		   success: function(data){
+			   var j=0;
+			
+			 for ( var i = 0; i < data.length; i++) {
+				 if(data[i].addrDefault=="0"){
+					 j++;
+				 }
+				 
+			 }
+			 if(j==0){
+					$.ajax({
+						   type: "POST",
+						   url: path+"/wap/memberAddr/toDefaultAddr.mobile",
+						   data:{"addrId":data[data.length-1].addrId} ,
+						   success: function(msg){
+							   findAddress();
+						   }
+					});
+			 }
+			  var html= addressHtml(data);
+			  addrData=data;
+			 $(".addr").html(addressHtml(data));
+		   }
+		});
+}
+//获取地址的html
+function addressHtml(data){
+	var html="";
+	for ( var i = 0; i < data.length; i++) {
+		if(data[i].addrDefault=="0"){
+		html+='	<div class="weui-panel address-box">\
+		    	<div class="weui-panel__bd">\
+				<div class="weui-media-box weui-media-box_text address-list-box">\
+	        	<a  href="javascript:;" onclick="updAddr('+data[i].addrId+')"class="address-edit"></a>\
+	        	<h4 class="weui-media-box__title"><span>'+data[i].recipient+'</span>&nbsp;&nbsp;&nbsp;<span>'+data[i].mobile+'</span></h4>\
+	        	<p class="weui-media-box__desc address-txt">'+data[i].addrArea+''+data[i].addr+'</p>\
+	        	<span class="default-add">默认地址</span>\
+	        	<a href="javascript:;" class="wy-dele" onclick="delAddress1('+data[i].addrId+')"></a>\
+				</div></div></div>';
+		}else{
+			html+='	<div class="weui-panel address-box" >\
+		    	<div class="weui-panel__bd">\
+				<div class="weui-media-box weui-media-box_text address-list-box">\
+				<a  href="javascript:;" onclick="updAddr('+data[i].addrId+')"class="address-edit"></a>\
+	        	<h4 class="weui-media-box__title"><span>'+data[i].recipient+'</span>&nbsp;&nbsp;&nbsp;<span>'+data[i].mobile+'</span></h4>\
+	        	<p class="weui-media-box__desc address-txt">'+data[i].addrArea+''+data[i].addr+'</p>\
+	        	<a href="javascript:;" class="wy-dele" onclick="delAddress1('+data[i].addrId+')"></a>\
+	        	</div></div></div>';
+		}
+	}
+	return html;
+}
+//修改地址
+function updAddr(addrId){
+	$("#addrId").val(addrId);
+	$("#full").popup();
+	$("#rollback").attr("onclick","closeFull()");
+	$("#xsbtn").html('<a class="weui-btn weui-btn_primary" href="javascript:;" id="showTooltips" onclick="address();">保存此地址</a>\
+						<a href="javascript:;" class="weui-btn weui-btn_warn" onclick="delAddress();">删除此地址</a>');
+	$("#addBtn").html("");
+	var queryParam={"addrId":addrId}; 
+	$(".wy-header-title").html("编辑地址");
+	$.ajax({
+		   type: "POST",
+		   url:path+"/wap/memberAddr/list.mobile",
+		   data:queryParam,
+		   dataType:"json" ,
+		   success: function(data){
+			   $("#recipient").val(data[0].recipient);
+			   $("#mobile").val(data[0].mobile);
+			   $("#address").val(data[0].addrArea);
+			   $("#addr").val(data[0].addr);
+			   $("#code").val(data[0].postCode);
+			  
+			   if(data[0].addrDefault=="0"){
+				   $(".weui-cell__ft").html('<input class="weui-switch"   type="checkbox" id="button1" name="button1" onclick="clickBtn();" checked="checked" />');
+				   $("#btn").val("on");
+					
+			   }if(data[0].addrDefault=="1"){
+				   $("#button1").removeAttr("checked");
+				   $("#btn").val("off");
+			   }
+		   }
+		});
+
+}
+//删除地址
+function delAddress(){	
+	if($("#addrId").val()==""){
+		return;
+	}
+	var queryParam={"ids":$("#addrId").val()}; 
+	$.confirm("确认删除地址", function() {
+		$.ajax({
+			   type: "POST",
+			   url: path+"/wap/memberAddr/delete.mobile",
+			   data:queryParam,
+			   success: function(msg){
+				   $.closePopup();
+				   	closeFull();
+				   	findAddress();
+					$.toast("地址删除成功！");
+			   }
+			});
+		
+		  }, function() {
+		 
+}); 
+}
+function delAddress1(addrId){
+
+	var queryParam={"ids":addrId}; 
+	
+	$.confirm("确认删除地址", function() {
+		$.ajax({
+			   type: "POST",
+			   url: path+"/wap/memberAddr/delete.mobile",
+			   data:queryParam,
+			   success: function(msg){
+					$.closePopup();
+				   	findAddress();
+					$.toast("地址删除成功！");
+					
+			   }
+			});
+		
+		  }, function() {
+		 
+}); 
+}
+//关闭full
+function closeFull(){
+		$("#recipient").val("");
+		$("#mobile").val("");
+		$("#addr").val("");
+		$("#code").val("");
+		$("#addrId").val("");
+		$(".wy-header-title").html("地址管理");
+		$("#rollback1").html( '<div class="wy-header-icon-back close-popup" onclick=javascript:location.href="mine.jsp" id="rollback"><span></span></div>');
+		$("#addBtn").html(' <a href="javascript:;" class="weui-btn weui-btn_primary open-popup" data-target="#full"onclick="addFull();">添加新地址</a>');
+}
+//打开full
+function addFull(){
+	$("#addBtn").html("");
+	$("#xsbtn").html('<a class="weui-btn weui-btn_primary" href="javascript:;" id="showTooltips" onclick="address();" >保存此地址</a>');
+	$("#rollback").attr("onclick","closeFull()");
+}

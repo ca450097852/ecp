@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.sys.dao.RoleUserDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.sys.model.TsRoleUser" >
+    <result column="ru_id" property="ruId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+  	ru_id, role_id, user_id
+  </sql>
+  
+  <insert id="add" parameterType="com.hontek.sys.model.TsRoleUser" >
+    insert into ts_role_user (ru_id, role_id, user_id
+      )
+    values (#{ruId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hontek.sys.model.TsRoleUser" >
+    insert into ts_role_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ruId != null" >
+        ru_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ruId != null" >
+        #{ruId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <sql id="getCommon" >
+    	from ts_role_user where 1 = 1 
+    <if test="params != null and params.roleId != null" >
+    	and role_id = #{params.roleId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.userId != null" >
+    	and user_id = #{params.userId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+	
+	<!-- 删除用户角色 -->
+	  <delete id="deleteRoleToUser" parameterType="java.lang.String" >
+	    delete from ts_role_user
+	    where user_id = #{userId,jdbcType=VARCHAR}
+	  </delete>
+  
+  
+</mapper>

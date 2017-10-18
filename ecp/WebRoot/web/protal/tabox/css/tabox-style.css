@@ -1,0 +1,88 @@
+/* css 重置 */
+
+/* 本例子css */
+.tabox{width:996px;border-top:4px solid #ff6c00;
+margin-bottom:10px;}
+.tabox .hd{overflow:hidden;background:url(../../../../%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%20-%20%E6%8B%B7%E8%B4%9D/protal/tabox/images/bg.png) 0 -32px #efefef;border-left:1px solid #ddd;}
+.tabox .hd li{position:relative;margin-left:-1px;height:37px;line-height:37px;text-align:center;width:151px;float:left;border:1px solid #ddd;border-top:0;font:normal 14px/37px "Microsoft YaHei";_font-weight:bold;cursor:default;}
+.tabox .hd li.on{width:150px;background:#fff;border-bottom:1px solid #fff;color:#ff6c00;}
+.tabox .bd{border:1px solid #ddd;border-top:0;}
+.tabox .lh{overflow:hidden;}
+.tabox .lh.tabox-01 strong{display:block;margin:20px 0 0 20px; height:25px; line-height:25px;}
+.tabox .lh.tabox-01 ul{
+	height:50px;}
+.tabox .lh.tabox-01 ul li{
+	float:left;
+	width:200px;
+	height:25px;
+	line-height:25px;
+	margin-left:20px;
+	}
+.tabox .lh.tabox-01 .pic-show{
+	width:996px;
+	text-align:center;
+	padding-top:20px;
+	}
+.tabox .lh.tabox-01 img{
+	width:750px;}
+.tabox .lh.tabox-02 .comment-percent{
+	width:80px;
+	text-align:center;
+	margin:20px 10px 0 40px;
+	float:left;}
+.tabox .lh.tabox-02 .comment-percent span{
+	display:block;
+	color:#ff6c00;
+	font-size:30px;
+	font-weight:bold;
+	font-family:Arial, Helvetica, sans-serif;
+	}
+.tabox .lh.tabox-02 .comment-type{
+	float:left;
+	margin-top:40px;
+	}
+.tabox .lh.tabox-02 .comment-type ul li{
+	float:left;
+	width:120px;
+	text-align:center;
+	}
+.tabox .lh.tabox-02 .comment-type ul li a:hover{
+	color:#ff6c00
+	}
+.tabox .lh.tabox-02 .comment-content{
+	width:926px;
+	border-top:1px solid #d0d0d0;
+	margin:0 auto;
+	}
+.tabox .lh.tabox-02 .comment-content .comment-item{
+	width:926px;
+	padding:20px 0;
+	border-bottom:1px solid #d0d0d0;
+	}
+.tabox .lh.tabox-02 .comment-content .user-info{
+	font-size:12px;
+	width:120px;
+	height:40px;
+	line-height:40px;
+	float:left;
+	}
+.tabox .lh.tabox-02 .comment-content .user-info img{
+	float:left;
+	width:40px;
+	height:40px;
+	margin-right:8px;
+	border-radius:50%;}
+.tabox .lh.tabox-02 .comment-content .user-info p{
+	float:left;}
+.tabox .lh.tabox-02 .comment-content .user-comment{
+	width:800px;
+	float:right
+	}
+.tabox .lh.tabox-02 .comment-content .user-comment .comment-date{
+	margin-top:5px;
+	color:#999;}
+.tabox .lh.tabox-02 .comment-content .user-comment .recomment{
+	border-top:1px solid #d0d0d0;
+	margin-top:10px;
+	padding-top:10px;
+	color:#ff6c00}

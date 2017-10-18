@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.member.dao.MemberAddrDao" >
+  
+  <resultMap id="BaseResultMap" type="com.hontek.member.model.TbMemberAddr" >
+    <id column="addr_id" property="addrId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="addr_area" property="addrArea" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="addr_default" property="addrDefault" jdbcType="VARCHAR" />
+    <result column="recipient" property="recipient" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    addr_id, member_id, addr_area, addr, telephone, mobile, post_code, addr_default,recipient
+  </sql>
+  
+  <select id="findPageList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_addr where 1 = 1 
+    <if test="params != null and params.memberId != null" >
+    and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+    
+  </select>
+  
+    <select id="findById" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_member_addr where 1 = 1 and addr_id = #{params.addrId,jdbcType=INTEGER}
+   
+  </select>
+  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+	SELECT COUNT(*) ct 
+	from tb_member_addr where 1 = 1 
+    <if test="params != null and params.memberId != null" >
+    and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.addrId != null" >
+    and addr_id = #{params.addrId,jdbcType=INTEGER}
+    </if>
+	</select>
+	
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_member_addr
+    where addr_id = #{addrId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.hontek.member.model.TbMemberAddr" >
+    insert into tb_member_addr (member_id, addr_id, addr_area, 
+      addr, telephone, mobile, 
+      post_code, addr_default,recipient)
+    values (#{memberId,jdbcType=INTEGER}, #{addrId,jdbcType=INTEGER}, #{addrArea,jdbcType=VARCHAR}, 
+      #{addr,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{postCode,jdbcType=VARCHAR}, #{addrDefault,jdbcType=VARCHAR},#{recipient,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.hontek.member.model.TbMemberAddr" >
+    update tb_member_addr
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="addrArea != null" >
+        addr_area = #{addrArea,jdbcType=VARCHAR},
+      </if>
+      <if test="addr != null" >
+        addr = #{addr,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrDefault != null" >
+        addr_default = #{addrDefault,jdbcType=VARCHAR},
+      </if>
+      <if test="recipient != null" >
+        recipient = #{recipient,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where addr_id = #{addrId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateaddrDefault" parameterType="com.hontek.member.model.TbMemberAddr" >
+    update tb_member_addr set addr_default=1 where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
+
+	<!-- 结果集（包含goods） -->
+	<resultMap id="BaseResultMap2" type="com.hontek.member.model.TbMemberAddr" >
+    <id column="addr_id" property="addrId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="addr_area" property="addrArea" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="addr_default" property="addrDefault" jdbcType="VARCHAR" />
+    <result column="recipient" property="recipient" jdbcType="VARCHAR" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+	<sql id="getCommon2" >
+    from tb_member_addr c,tb_member g where 1 = 1 and c.member_id = g.member_id 
+    <if test="params != null and params.memberId != null" >
+    and c.member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+    <!--  查询列表2 -->
+	<select id="findPageList2" resultMap="BaseResultMap2" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  c.addr_id, c.member_id, c.addr_area, c.addr, 
+		c.telephone, c.mobile, c.post_code, c.addr_default,c.recipient,g.member_name
+		<include refid="getCommon2" />
+	</select>
+	
+	<!--  不分页查询列表 -->
+	<select id="findList" resultMap="BaseResultMap2" parameterType="com.hontek.member.model.TbMemberAddr">
+		select  c.addr_id, c.member_id, c.addr_area, c.addr, 
+		c.telephone, c.mobile, c.post_code, c.addr_default,c.recipient,g.member_name
+		from tb_member_addr c,tb_member g where 1 = 1 and c.member_id = g.member_id 
+		<if test="addrId != null &amp;&amp; addrId != ''" >
+	    and c.addr_id = #{addrId,jdbcType=INTEGER}
+	    </if>
+	 
+	    and c.member_id = #{memberId,jdbcType=INTEGER}
+	     order by addr_default 
+	</select>
+	
+	
+	<select id="getCount2" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon2" />
+	</select>
+</mapper>

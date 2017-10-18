@@ -1,0 +1,135 @@
+package com.hontek.goods.service;
+
+import com.alibaba.fastjson.JSONObject;
+import com.hontek.comm.model.Grid;
+import com.hontek.comm.util.DateUtil;
+import com.hontek.comm.util.SearchPageUtil;
+import com.hontek.comm.util.UUIDUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hontek.goods.dao.GoodsDao;
+import com.hontek.goods.dao.RecommendGoodsDao;
+import com.hontek.goods.model.RecommendGoods;
+import com.hontek.goods.model.TbGoods;
+import com.hontek.goods.model.TbGoodsModel;
+
+/**
+ * 
+* <p>Title: 推荐商品 service实现类</p>
+* <p>Description: </p>
+* <p>Copyright: Copyright (c) 2017</p>
+* <p>Company: **公司</p>
+* @version 1.0
+ */
+@Service("recommendGoodsService")
+public class RecommendGoodsServiceImpl implements RecommendGoodsService {
+	private Logger logger = Logger.getLogger(RecommendGoodsServiceImpl.class);
+	
+	@Autowired
+	private RecommendGoodsDao recommendGoodsDao;
+	@Autowired
+	private GoodsDao goodsDao;
+	@Autowired
+	private GoodsModelService goodsModelService;
+	
+	@Override
+	public Grid findPageList(SearchPageUtil page) {
+		List<RecommendGoods> rows = recommendGoodsDao.findPageList(page);
+		for (RecommendGoods recommendGoods : rows) {
+			TbGoods goods = goodsDao.getGoodsById(String.valueOf(recommendGoods.getGoodsId()));
+			recommendGoods.setGoods(goods);
+		}
+		int total = recommendGoodsDao.getCount(page);
+		Grid grid = new Grid(total,rows);
+		return grid;
+	}
+	
+	@Override
+	public List<RecommendGoods> findList(SearchPageUtil page) {
+		List<RecommendGoods> rows = recommendGoodsDao.findPageList(page);
+		for (RecommendGoods recommendGoods : rows) {
+			TbGoods goods = goodsDao.getGoodsById(String.valueOf(recommendGoods.getGoodsId()));
+			
+			List<String> imgList = new ArrayList<String>();		
+			//商品基本信息
+			if(goods!=null&&goods.getGoodsImg()!=null&&!"".equals(goods.getGoodsImg())){
+				imgList.add(goods.getGoodsImg());
+			}
+			//商品规格//存放商品图片
+			List<TbGoodsModel> modelList = goodsModelService.findModelList(String.valueOf(recommendGoods.getGoodsId()));
+			for (TbGoodsModel tbGoodsModel : modelList) {
+				imgList.add(tbGoodsModel.getModelImg());
+			}
+			recommendGoods.setGoodsImgs(imgList);
+			recommendGoods.setGoods(goods);
+		}
+		return rows;
+	}
+
+	@Override
+	public String addRecommendGoods(RecommendGoods recommendGoods) {
+		String message = "0";
+		try {
+			String rgId = UUIDUtil.getUUID();
+			recommendGoods.setRgId(rgId);
+			recommendGoods.setCreateTime(DateUtil.formatDateTime());
+			recommendGoods.setState("1");
+			recommendGoodsDao.add(recommendGoods);
+			 message = rgId;
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "0";
+			logger.error(message+e.getMessage());
+		}
+		return message;
+	}
+
+	@Override
+	public String updateRecommendGoods(RecommendGoods recommendGoods) {
+		String message = "修改商品推荐成功!";
+		try {
+			recommendGoodsDao.update(recommendGoods);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "修改商品推荐失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+
+	@Override
+	public String deleteRecommendGoods(String ids) {
+		String message = "删除商品推荐成功!";
+		try {
+			recommendGoodsDao.delete(ids);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "删除商品推荐失败!"+e.getMessage();
+			logger.error(message);
+		}
+		return message;
+	}
+	
+	
+	public JSONObject getRecommend(Integer memberId) {
+		SearchPageUtil page = new SearchPageUtil();
+		page.getParams().put("menberId", memberId);
+		page.getParams().put("state", "1");
+		page.setRows(100);		
+		List<RecommendGoods> rows = recommendGoodsDao.findPageList(page);
+
+		
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("recommendGoods", rows.size());
+		jsonObject.put("recommendOrders", 1);
+		return jsonObject;
+	}
+
+}

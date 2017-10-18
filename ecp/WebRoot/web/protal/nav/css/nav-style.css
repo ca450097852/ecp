@@ -1,0 +1,64 @@
+
+.hide{display:none}
+.clearfix:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0}
+.clearfix{*zoom:1}
+em,i,s{font-style:normal;}
+
+/* ÂØºËà™Ê†∑Âºè */
+
+.navwrap{height:36px;}
+#nav{height:35px;width:1200px;margin:0 auto;position:relative;padding:0;z-index:99}
+.navbar{height:35px;padding-left:200px;position:relative}
+.navbar a{float:left;width:auto;text-align:center;height:36px;line-height:36px;color:#333;padding:0 15px;text-decoration:none;font-size:15px;white-space:nowrap;position:relative}
+.navbar a.first{border-left:0 none}
+.navbar a.last{border-right:0 none}
+.navbar a:hover{background-color:#ff6c00;color:#fff}
+.navbar a.current{color:#ff6c00; font-weight:bold;}
+.navbar a:hover{text-decoration:none}
+.navbar a.current:hover{color:#fff}
+.navbar .navbt{width:105px;height:30px;position:absolute;top:3px;right:10px;background:url(../../../../%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%20-%20%E6%8B%B7%E8%B4%9D/protal/nav/images/navbt.jpg) no-repeat;border:0 none;float:none;font-size:14px;line-height:30px;padding:0}
+a.navbt span{background:url(../../../../%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%20-%20%E6%8B%B7%E8%B4%9D/protal/nav/images/iconmap.jpg) no-repeat 1px 3px;padding-left:18px}
+.navbar a.navbt:hover{background:transparent url(../../../../%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%20-%20%E6%8B%B7%E8%B4%9D/protal/nav/images/navbt-hover.jpg) no-repeat}
+.navbar a.navbt:hover span{background-image:url(../../../../%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%20-%20%E6%8B%B7%E8%B4%9D/protal/nav/images/iconmap-hover.jpg)}
+
+.pros{position:absolute;top:0px;left:0;z-index:1000;width:200px;background-color:#fff}
+.pros h2{width:184px;height:37px;line-height:37px;color:#fff;padding-left:16px;font-size:16px;}
+.subpage h2{display:block; background:url(../images/icon-dropdown.jpg) 180px center no-repeat;background-color:#ff6c00;cursor:pointer}
+.subpage .prosul{display:none}
+.prosul{width:198px;overflow:hidden;height:451px; background:#ff6c00; border:1px solid #d0d0d0;}
+.prosul li,.prosul i{background:url(../images/iconcatg.png) no-repeat; }
+li.fruit{background-position:10px 20px}
+li.seafood{background-position:10px -30px}
+li.meat{background-position:10px -80px}
+li.egg{background-position:10px -126px}
+li.vegetable{background-position:10px -180px}
+li.freeze{background-position:10px -232px}
+li.desert{background-position:10px -275px}
+.prosul li{height:64px;_overflow:hidden;padding-left:36px; background-color:#fff;border-left:3px solid #fff;font-family: "Œ¢»Ì—≈∫⁄";
+font-size: 12px;}
+.prosul li p{display: inline-block;float: left;margin: 5px 0 0 10px;}
+.prosul li span {font-size: 14px;display: block;font-weight: bold;}
+.prosul li.prosahover{background-color:#ffefe4; border-left:3px solid #ff6c00;}
+.prosul a{color:#333;padding-right:10px; margin-right:2px; padding-top:5px;white-space:nowrap;display:inline-block;height:24px; line-height:24x;}
+.prosul a.hot{background:url(../images/icon-hot.png) right top  no-repeat}
+.prosul li.prosahover a{color:#333}
+.prosul li a.ti{font-size:14px;color:#333; font-weight:bold}
+.prosul li.prosahover a.ti{color:#333}
+.prosul li a:hover{color:#ff6c00}
+.prosul li.nochild a:hover{color:#333}
+.prosul li i{float:right;display:block;width:3px;height:50px;text-indent:-999em;background-position:0 -320px;padding-right:12px}
+.prosul li.prosahover i{background-position:0 -320px}
+.prosul li.last{border-bottom:0 none}
+.prosul li.hotareas{background-image:none;padding-left:12px;line-height:26px;height:106px;*overflow:hidden}
+.prosul li.hotareas i{line-height:30px;margin-top:-2px;height:40px;background-position:0 -279px}
+.prosul li.hotareas a{line-height:30px;height:30px}
+.prosul li.hotareas a.hot{background-position:right 0}
+.prosul li h2{padding-left:0;line-height:40px;display:inline;font-size:14px;font-weight:400;}
+.prosul li.prosahover h2{color:#d03322}
+.prosmore{padding:15px 0 15px 15px;position:absolute;z-index:999;left:200px;top:38px;background-color:#fff;border:1px #ff6c00 solid;width:214px;height:382px}
+.prosul .prosmore{text-align:left}
+.prosul .prosmore span{float:left;height:36px;width:107px;line-height:22px}
+.prosul li .prosmore a{height:18px;line-height:18px;padding:0 4px; font-size:12px;}
+.prosul li .prosmore a:hover{background:#ff6c00;color:#fff}
+.prosmore em{font-weight:400;padding-top:9px;display:inline-block}
+.prosmore em.morehot{background:url(../images/icon-hot-more.png) right top no-repeat;padding-right:22px}

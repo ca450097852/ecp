@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.RecommendGoodsDao" >
+
+  <resultMap id="BaseResultMap" type="com.hontek.goods.model.RecommendGoods" >
+    <id column="rg_id" property="rgId" jdbcType="VARCHAR" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="menber_id" property="menberId" jdbcType="INTEGER" />
+    <result column="rg_price" property="rgPrice" jdbcType="REAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="saled_price" property="saledPrice" jdbcType="REAL" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rg_id, goods_id, goods_name, menber_id, rg_price, create_time, saled_price,introduce
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_recommend_goods
+    where rg_id = #{rgId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_recommend_goods where rg_id = #{rgId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="add" parameterType="com.hontek.goods.model.RecommendGoods" >
+    insert into tb_recommend_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rgId != null" >
+        rg_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="menberId != null" >
+        menber_id,
+      </if>
+      <if test="rgPrice != null" >
+        rg_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="saledPrice != null" >
+        saled_price,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rgId != null" >
+        #{rgId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="menberId != null" >
+        #{menberId,jdbcType=INTEGER},
+      </if>
+      <if test="rgPrice != null" >
+        #{rgPrice,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="saledPrice != null" >
+        #{saledPrice,jdbcType=REAL},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.hontek.goods.model.RecommendGoods" >
+    update tb_recommend_goods
+    <set >
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="menberId != null" >
+        menber_id = #{menberId,jdbcType=INTEGER},
+      </if>
+      <if test="rgPrice != null" >
+        rg_price = #{rgPrice,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="saledPrice != null" >
+        saled_price = #{saledPrice,jdbcType=REAL},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rg_id = #{rgId,jdbcType=VARCHAR}
+  </update>
+  
+
+</mapper>

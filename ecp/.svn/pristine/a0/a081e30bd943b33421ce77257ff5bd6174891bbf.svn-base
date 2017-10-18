@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.goods.dao.GoodsDao">
+
+	<resultMap id="BaseResultMap" type="com.hontek.goods.model.TbGoods">
+		<id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="shop_id" property="shopId" jdbcType="INTEGER" />
+		<result column="type_id" property="typeId" jdbcType="INTEGER" />
+		<result column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="model_id" property="modelId" jdbcType="INTEGER" />
+		<result column="good_seq" property="goodSeq" jdbcType="INTEGER" />
+		<result column="theme_googs_id" property="themeGoogsId" jdbcType="INTEGER" />
+		<result column="chengben_price" property="chengbenPrice" jdbcType="FLOAT" />
+		<result column="market_price" property="marketPrice" jdbcType="FLOAT" />
+		<result column="saled_price" property="saledPrice" jdbcType="FLOAT" />
+		<result column="saled_num" property="saledNum" jdbcType="INTEGER" />
+		<result column="inventory" property="inventory" jdbcType="INTEGER" />
+		<result column="goods_no" property="goodsNo" jdbcType="VARCHAR" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="dimenno" property="dimenno" jdbcType="VARCHAR" />
+		<result column="dimenno_img" property="dimennoImg" jdbcType="VARCHAR" />
+		<result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+		<result column="goods_specs" property="goodsSpecs" jdbcType="VARCHAR" />
+		<result column="goods_desc" property="goodsDesc" jdbcType="VARCHAR" />
+		<result column="net_weight" property="netWeight" jdbcType="VARCHAR" />
+		<result column="rough_weight" property="roughWeight" jdbcType="VARCHAR" />
+		<result column="goods_addr" property="goodsAddr" jdbcType="VARCHAR" />
+		<result column="source_area" property="sourceArea" jdbcType="VARCHAR" />
+		<result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+		<result column="source_tel" property="sourceTel" jdbcType="VARCHAR" />
+		<result column="source_addr" property="sourceAddr" jdbcType="VARCHAR" />
+		<result column="storage_conditions" property="storageConditions" jdbcType="VARCHAR" />
+		<result column="shelf_life" property="shelfLife" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+		<result column="recommend" property="recommend" jdbcType="VARCHAR" />
+		<result column="agency_price1" property="agencyPrice1" jdbcType="FLOAT" />
+		<result column="agency_price2" property="agencyPrice2" jdbcType="FLOAT" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap type="com.hontek.comm.model.Tree" id="TreeVo">
+	    <id column="goods_id" property="id" jdbcType="INTEGER"/>
+	    <result column="goods_name" property="text" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		goods_id,goods_name,tb_goods.shop_id,shop_name,type_id,brand_id,good_seq,chengben_price,market_price,saled_price,saled_num,inventory,goods_no,barcode,dimenno,dimenno_img,goods_img,goods_specs,goods_desc,net_weight,rough_weight,goods_addr,source_area,manufacturer,
+		source_tel,source_addr,storage_conditions,shelf_life,state,create_time,update_time,tb_goods.member_id,remark,recommend,agency_price1,agency_price2
+	</sql>
+	
+	<sql id="getCommon">
+		<if test="params.goodsId!=null"> and tg.goods_id = #{params.goodsId}</if>	
+		<if test="params.shopId!=null"> and tg.shop_id = #{params.shopId}</if>
+		<if test="params.recommend!=null"> and tg.recommend = #{params.recommend}</if>
+	    <if test="params.goodsNo!=null"> and tg.goods_no like '%${params.goodsNo}%'</if>
+	    <if test="params.goodsName!=null"> and tg.goods_name like '%${params.goodsName}%'</if>
+	    <if test="params.typeId!=null and params.typeId!=''"> and tg.type_id=${params.typeId}</if>
+	    <if test="params.state!=null"> and tg.state=${params.state}</if>
+	    <if test="params.memberId!=null"> and shop_id=(select max(shop_id) from tb_shop where member_id=${params.memberId}) </if>
+	    <if test="params.columnId!=null"> and tg.goods_id in (select goods_id from tb_column_goods where column_id=${params.columnId})</if>
+	    <!--根据主题id查询商品-->
+	    <if test="params.themeId!=null"> and tg.goods_id in (select goods_id from tb_theme_goods where theme_id=${params.themeId})</if>
+	</sql>
+
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		SELECT tg.*,tgt.type_name FROM tb_goods tg LEFT JOIN tb_goods_type tgt on (tg.type_id=tgt.type_id) where 1=1
+		<include refid="getCommon"/>
+	</select>
+	
+	<select id="findPageList1" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		SELECT tg.*,tgt.type_name FROM tb_goods tg LEFT JOIN tb_goods_type tgt on (tg.type_id=tgt.type_id) where 1=1
+		<include refid="getCommon"/>
+		order by create_time desc 
+	</select>
+	
+	<select id="findPageList2" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		SELECT tg.*,tgt.type_name,ttg.theme_googs_id FROM tb_goods tg LEFT JOIN tb_goods_type tgt on (tg.type_id=tgt.type_id)
+		INNER JOIN tb_theme_goods ttg ON ttg.goods_id=tg.goods_id 
+		 where 1=1
+		<include refid="getCommon"/>
+		order by tg.create_time desc 
+	</select>
+	
+	<select id="findPageList3" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		SELECT tg.*,tgt.type_name FROM tb_goods tg LEFT JOIN tb_goods_type tgt on (tg.type_id=tgt.type_id) where 1=1
+		<include refid="getCommon"/>
+		ORDER BY tg.saled_num DESC
+	</select>
+	
+	
+	<select id="ListShopGoods" resultMap="BaseResultMap" >
+		SELECT tg.*,tgt.type_name FROM tb_goods tg LEFT JOIN tb_goods_type tgt on (tg.type_id=tgt.type_id) where 1=1
+		and tg.shop_id = #{shopId} and tg.state="2" ORDER BY tg.create_time DESC
+	</select>
+	
+	<select id="ListShopGoodsByTypeId" resultMap="BaseResultMap" >
+		SELECT tg.*  FROM tb_goods tg INNER JOIN tb_goods_type tgt on (tg.type_id=tgt.type_id) INNER JOIN tb_shop ts ON (ts.shop_id=tg.shop_id) where 1=1
+		and tg.shop_id =#{shopId} AND tgt.type_id=#{typeId}
+	</select>
+
+	<select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		select count(*) from tb_goods tg where 1=1 
+		<include refid="getCommon"/>
+	</select>
+	
+	<select id="findForTree"  resultMap="TreeVo">
+	    SELECT goods_id,goods_name from tb_goods where goods_id not in(SELECT goods_id from tb_theme_goods where theme_id=#{themeId,jdbcType=INTEGER}) and state="2" and type_id=#{typeId,jdbcType=INTEGER}
+	</select>
+
+	<insert id="add" parameterType="com.hontek.goods.model.TbGoods">
+		insert into tb_goods (<include refid="Base_Column_List"/>) values (${goodsId},#{goodsName},${shopId},${typeId},#{brandId,jdbcType=INTEGER},${goodSeq},${chengbenPrice},${marketPrice},${saledPrice},${saledNum},${inventory},#{goodsNo},#{barcode},#{dimenno},#{dimennoImg},#{goodsImg},#{goodsSpecs},#{goodsDesc},#{netWeight},#{roughWeight},#{goodsAddr},#{sourceArea},#{manufacturer},#{sourceTel},#{sourceAddr},#{storageConditions},#{shelfLife},#{state},#{createTime},#{updateTime},${memberId},#{remark},#{recommend},#{agencyPrice1},#{agencyPrice2})
+	</insert>
+
+	<update id="update" parameterType="com.hontek.goods.model.TbGoods">
+    update tb_goods
+    <set >
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="goodSeq != null" >
+        good_seq = #{goodSeq,jdbcType=INTEGER},
+      </if>
+      <if test="chengbenPrice != null" >
+        chengben_price = #{chengbenPrice,jdbcType=REAL},
+      </if>
+      <if test="marketPrice != null" >
+        market_price = #{marketPrice,jdbcType=REAL},
+      </if>
+      <if test="saledPrice != null" >
+        saled_price = #{saledPrice,jdbcType=REAL},
+      </if>
+      <if test="saledNum != null" >
+        saled_num = #{saledNum,jdbcType=INTEGER},
+      </if>
+      <if test="inventory != null" >
+        inventory = #{inventory,jdbcType=INTEGER},
+      </if>
+      <if test="goodsNo != null" >
+        goods_no = #{goodsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="barcode != null" >
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dimenno != null" >
+        dimenno = #{dimenno,jdbcType=VARCHAR},
+      </if>
+      <if test="dimennoImg != null" >
+        dimenno_img = #{dimennoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImg != null" >
+        goods_img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="netWeight != null" >
+        net_weight = #{netWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="roughWeight != null" >
+        rough_weight = #{roughWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsAddr != null" >
+        goods_addr = #{goodsAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceArea != null" >
+        source_area = #{sourceArea,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null" >
+        manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceTel != null" >
+        source_tel = #{sourceTel,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceAddr != null" >
+        source_addr = #{sourceAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="storageConditions != null" >
+        storage_conditions = #{storageConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="shelfLife != null" >
+        shelf_life = #{shelfLife,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="recommend != null" >
+        recommend = #{recommend,jdbcType=VARCHAR},
+      </if>
+      <if test="agencyPrice1 != null" >
+        agency_price1 = #{agencyPrice1,jdbcType=REAL},
+      </if>
+      <if test="agencyPrice2 != null" >
+        agency_price2 = #{agencyPrice2,jdbcType=REAL},
+      </if>
+      <if test="goodsSpecs != null" >
+        goods_specs = #{goodsSpecs,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc = #{goodsDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+</update>
+	
+	<update id="updateSelective" parameterType="com.hontek.goods.model.TbGoods">
+		update tb_goods set
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="recommend != null"> recommend=#{recommend},</if> 
+			<if test="remark != null"> remark=#{remark},</if>
+			<if test="memberId != null"> member_id=${memberId},</if>
+			<if test="updateTime != null"> update_time=#{updateTime},</if>
+			<if test="shelfLife != null"> shelf_life=#{shelfLife},</if>
+			<if test="storageConditions != null"> storage_conditions=#{storageConditions},</if>
+			<if test="sourceAddr != null"> source_addr=#{sourceAddr},</if>
+			<if test="sourceTel != null"> source_tel=#{sourceTel},</if>
+			<if test="manufacturer != null"> manufacturer=#{manufacturer},</if>
+			<if test="sourceArea != null"> source_area=#{sourceArea},</if>
+			<if test="goodsAddr != null"> goods_addr=#{goodsAddr},</if>
+			<if test="roughWeight != null"> rough_weight=#{roughWeight},</if>
+			<if test="netWeight != null"> net_weight=#{netWeight},</if>
+			<if test="goodsDesc != null"> goods_desc=#{goodsDesc},</if>
+			<if test="goodsSpecs != null"> goods_specs=#{goodsSpecs},</if>
+			<if test="goodsImg != null"> goods_img=#{goodsImg},</if>
+			<if test="barcode != null"> barcode=#{barcode},</if>
+			<if test="inventory != null"> inventory=${inventory},</if>
+			<if test="saledNum != null"> saled_num=${saledNum},</if>
+			<if test="saledPrice != null"> saled_price=${saledPrice},</if>
+			<if test="marketPrice != null"> market_price=${marketPrice},</if>
+			<if test="chengbenPrice != null"> chengben_price=${chengbenPrice},</if>
+			<if test="goodSeq != null"> good_seq=${goodSeq},</if>
+			<if test="brandId != null"> brand_id=${brandId},</if>
+			<if test="typeId != null"> type_id=${typeId},</if>
+			<if test="goodsName != null"> goods_name=#{goodsName}</if>
+		</trim>
+		 where goods_id=${goodsId}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.String">
+		delete from tb_goods where goods_id in (${t})
+	</delete>
+	
+	<select id="getGoodsById" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select <include refid="Base_Column_List"/> from tb_goods,tb_shop where tb_goods.shop_id=tb_shop.shop_id and goods_id=#{goodsId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getGoodsByTypeIds" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select <include refid="Base_Column_List"/> from tb_goods where 1=1 
+	    <if test="shopId!=null and shopId!='' "> and shop_id = ${shopId} </if> 
+	    <if test="typeIds!=null and typeIds!='' "> and type_id in (${typeIds}) </if>
+	    <if test="brandId!=null and brandId!=0 "> and brand_id = ${brandId}</if>
+	    <if test="priceSql!=null and priceSql!=''">  ${priceSql}</if>
+	    <if test="goodsName!=null and goodsName!=''"> and goods_name like '%${goodsName}%'</if>
+	    <if test="orderBy!=null and orderBy!=''"> ${orderBy} </if>
+	    limit  ${page} , ${rows}
+	</select>
+	
+	<select id="getGoodsByTypeIdsCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+	    select count(*) from tb_goods  where 1=1 
+	    <if test="shopId!=null and shopId!='' "> and shop_id = ${shopId} </if> 
+	    <if test="typeIds!=null and typeIds!='' "> and type_id in (${typeIds}) </if> 
+	    <if test="brandId!=null and brandId!=0 "> and brand_id = ${brandId}</if>
+	     <if test="goodsName!=null and goodsName!=''"> and goods_name like '%${goodsName}%'</if>
+	</select>
+	
+	<select id="getGoodsByGoodsIds" resultMap="BaseResultMap" parameterType="java.lang.String">
+	    select * from tb_goods where goods_id in (${goodsIds}) 
+	    <if test="orderBy!=null and orderBy!=''"> ${orderBy} </if>
+	</select>
+	
+	<select id="findListOrderBy" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+	    select * from tb_goods where 1=1 
+	    <if test="params!=null and params.recommend!=null and params.recommend!=''"> and recommend = #{params.recommend,jdbcType=VARCHAR} </if>
+	    <if test="order!=null and order!=''"> ${order} </if> 
+	</select>
+	
+	<select id="getCountOrderBy" parameterType="com.hontek.comm.util.SearchPageUtil" resultType="java.lang.Integer">
+		 select count(*) from tb_goods where 1=1 
+	    <if test="params!=null and params.recommend!=null and params.recommend!=''"> and recommend = #{params.recommend,jdbcType=VARCHAR} </if>
+	</select>
+	
+	<!-- 审核商品 -->
+	<update id="auditGoods" parameterType="java.lang.String">
+	    update tb_goods set state=#{state} where goods_id in (${ids})
+	</update>
+	
+	<!-- 商品库存设置 -->
+	<update id="upGoods" parameterType="java.lang.String">
+	    update tb_goods set inventory=#{inventory} where goods_id in (${ids})
+	</update>
+</mapper>

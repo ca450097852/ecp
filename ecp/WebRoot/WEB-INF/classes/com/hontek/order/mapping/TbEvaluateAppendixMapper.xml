@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hontek.order.dao.EvaluateAppendixDao" >
+  <resultMap id="BaseResultMap" type="com.hontek.order.model.TbEvaluateAppendix" >
+    <id column="eval_app_id" property="evalAppId" jdbcType="INTEGER" />
+    <result column="eval_id" property="evalId" jdbcType="INTEGER" />
+    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+    <result column="app_path" property="appPath" jdbcType="VARCHAR" />
+    <result column="upload_time" property="uploadTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    eval_app_id, eval_id, app_name, app_path, upload_time, member_id
+  </sql>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from tb_evaluate_appendix
+    where eval_app_id = #{evalAppId,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hontek.order.model.TbEvaluateAppendix" >
+    insert into tb_evaluate_appendix (eval_app_id, eval_id, app_name, 
+      app_path, upload_time, member_id
+      )
+    values (#{evalAppId,jdbcType=INTEGER}, #{evalId,jdbcType=INTEGER}, #{appName,jdbcType=VARCHAR}, 
+      #{appPath,jdbcType=VARCHAR}, #{uploadTime,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="update" parameterType="com.hontek.order.model.TbEvaluateAppendix" >
+    update tb_evaluate_appendix
+    set eval_id = #{evalId,jdbcType=INTEGER},
+      app_name = #{appName,jdbcType=VARCHAR},
+      app_path = #{appPath,jdbcType=VARCHAR},
+      upload_time = #{uploadTime,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=INTEGER}
+    where eval_app_id = #{evalAppId,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getCommon" >
+    from tb_evaluate_appendix where 1 = 1 
+    <if test="params != null and params.memberId != null" >
+    and member_id = #{params.memberId,jdbcType=INTEGER}
+    </if>
+    <if test="params != null and params.evalId != null" >
+    and eval_id = #{params.evalId,jdbcType=INTEGER}
+    </if>
+  	</sql>
+  
+    <!--  查询列表 -->
+	<select id="findPageList" resultMap="BaseResultMap" parameterType="com.hontek.comm.util.SearchPageUtil">
+		select  
+		<include refid="Base_Column_List" />
+		<include refid="getCommon" />
+	</select>
+	
+	  <select id="getCount" parameterType="com.hontek.comm.util.SearchPageUtil"  resultType="java.lang.Integer">
+		SELECT COUNT(*) ct 
+		<include refid="getCommon" />
+	</select>
+  
+</mapper>
